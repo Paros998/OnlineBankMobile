@@ -5,8 +5,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import Login from "./views/UnauthorizedViews/Login/Login";
 import Authorized from "./views/AuthorizedViews/Authorized";
+import {initAxios} from "./utils/initAxios";
+
 
 const Stack = createNativeStackNavigator();
+initAxios();
 
 export default function App() {
   const theme = extendTheme({
@@ -117,7 +120,8 @@ export default function App() {
   });
 
   return (
-    <NativeBaseProvider theme={theme}>
+    <>
+      <NativeBaseProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Login"
@@ -128,6 +132,7 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
+    </>
   );
 }
 

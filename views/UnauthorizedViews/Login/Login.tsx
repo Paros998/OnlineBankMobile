@@ -1,69 +1,80 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {
   ArrowDownIcon,
   Button,
   Center,
   Divider,
-  FormControl,
   Heading,
-  Input,
   View,
-  VStack
+  useToast
 } from "native-base";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+import { Formik } from 'formik';
+import * as SecureStore from 'expo-secure-store';
+
+import {appendUrlSearchParams} from "../../../utils/appendUrlSearchParams";
+import LoginForm from "../../../components/Login/LoginForm";
+
 import {UserCredentials} from "../../../interfaces/UserCredentials";
-import {UserCredentialsValidation} from "../../../interfaces/UserCredentialsValidation";
+import {User} from "../../../interfaces/User";
+import {Roles} from "../../../enums/Roles";
+import * as Yup from "yup";
 
-const Login = () => {
+const formikValues:UserCredentials = {
+  username: '',
+  password: ''
+}
 
-  const [data,setData] = React.useState<UserCredentials>({
-    login: '' ,
-    password: ''
-  });
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .required("Username is Required").min(3,"Username must be at least 3 characters"),
+  password: Yup.string()
+    .required("Password is Required").min(3,"Password must be at least 3 characters"),
+});
 
-  const [errors,setErrors] = React.useState<UserCredentialsValidation>({
-    login: false ,
-    password: false
-  });
+const Login:FC = () => {
 
-  const validate = () => {
-    if(data.login.length <= 0){
-      setErrors({
-        ...errors,
-        login: true
-      });
+  const handleSubmit = async (values:UserCredentials) => {
+    const loginParams = appendUrlSearchParams(values);
+    const toast = useToast();
+    console.log(values);
+    try {
+      const response = await axios.post(`/login`, loginParams);
 
-    }else{
-      setErrors({
-        ...errors,
-        login: false
+      if (response.status === 200) {
+        const token = response.headers["authorization"];
+        const user: User = jwtDecode(token);
+        const role = user.authorities[0].authority;
+        //const token = await SecureStore.getItemAsync('secure_token'); na póżniej
+
+        if (role === Roles.RoleClient) {
+          toast.show({
+            title:"👍 Sukces logowania",
+            status: 'success',
+          });
+          axios.defaults.headers.common['Authorization'] = token;
+          await SecureStore.setItemAsync("JWT_USER_TOKEN", token);
+
+        } else {
+          toast.show({
+            title:"Ta aplikacja przeznaczona jest wyłącznie dla klientów",
+            status: 'warning',
+          });
+        }
+        //await currentUser?.fetchUser();
+      }
+    } catch (e: any) {
+      toast.show({
+        title: '👎 Nie udało się zalogować',
+        status: 'error',
       });
     }
-
-    if(data.password.length <= 0){
-      setErrors({
-        ...errors,
-        password: true
-      });
-    }else{
-      setErrors({
-        ...errors,
-        password: false
-      });
-    }
-
-    if(errors.login || errors.password)
-      return false;
-
-    return  true;
-  }
-
-  const onSubmit = () => {
-    validate() ? console.log('Validation true') : console.log('Validation false');
   }
 
   return (
     <View
-      backgroundColor='light.400'
+      backgroundColor='light.200'
       width={"full"}
       height={"full"}
       p={'0.5'}
@@ -73,6 +84,7 @@ const Login = () => {
         height={"full"}
         backgroundColor='dark.800'
         alignItems='center'
+        justifyContent='center'
       >
         <Heading
           mt={4}
@@ -83,72 +95,13 @@ const Login = () => {
           Logowanie
         </Heading>
 
-        <VStack
-          space={4}
-          mt={3}
-          backgroundColor='primary.500'
-          width='4/5'
-          rounded={"xl"}
-          height={'2/5'}
-          p={3}
-          pt={5}
-          pb={5}
+        <Formik<UserCredentials>
+          initialValues={formikValues}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
         >
-          <FormControl isRequired>
-            <FormControl.Label >
-              Login
-            </FormControl.Label>
-            <Input
-              color='dark.800'
-              backgroundColor={'light.50'}
-              placeholder={'Login...'}
-              onChangeText={
-                (value) => setData({...data,login: value})
-              }
-            />
-            {errors.login ?
-            <FormControl.ErrorMessage _text={{fontSize: 'xs',color:'light.50',fontWeight: 500}}>
-                Login nie może być pusty!
-            </FormControl.ErrorMessage>
-              : <FormControl.HelperText _text={{fontSize: 'xs'}}>
-                Nazwa do logowania
-              </FormControl.HelperText>
-            }
-          </FormControl>
-
-          <FormControl mt={5} isRequired>
-            <FormControl.Label>
-              Hasło
-            </FormControl.Label>
-            <Input
-              type='password'
-              color='dark.800'
-              backgroundColor={'light.50'}
-              placeholder={'Hasło...'}
-              onChangeText={
-                (value) => setData({...data,password: value})
-              }
-            />
-            {errors.password ?
-              <FormControl.ErrorMessage  _text={{fontSize: 'xs',color:'light.100',fontWeight: 500}}>
-                Hasło nie może być puste!
-            </FormControl.ErrorMessage>
-              : <FormControl.HelperText _text={{fontSize: 'xs'}}>
-                Hasło do logowania
-              </FormControl.HelperText>
-            }
-          </FormControl>
-
-        </VStack>
-        <Button
-          mt={5}
-          rounded='full'
-          colorScheme='primary'
-          width={"1/2"}
-          onPress={onSubmit}
-        >
-          Zaloguj
-        </Button>
+          <LoginForm/>
+        </Formik>
 
         <Divider my={4} w={"3/4"} backgroundColor='light.50'/>
 
@@ -166,7 +119,6 @@ const Login = () => {
             Pomoc
           </Button>
         </Center>
-
       </View>
     </View>
   );
