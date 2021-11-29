@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {extendTheme, NativeBaseProvider} from 'native-base';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
+import { extendTheme, NativeBaseProvider } from 'native-base';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from "./views/UnauthorizedViews/Login/Login";
-import Authorized from "./views/AuthorizedViews/Authorized";
-import {initAxios} from "./utils/initAxios";
+import AuthorizedViews from "./views/AuthorizedViews/AuthorizedViews";
+import { initAxios } from "./utils/initAxios";
+import Sandbox from "./views/sandbox/Sandbox";
 
 
 const Stack = createNativeStackNavigator();
@@ -122,16 +122,17 @@ export default function App() {
   return (
     <>
       <NativeBaseProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Login"
-          screenOptions={{headerShown: false}}
-        >
-          <Stack.Screen name="Login" component={Login}/>
-          <Stack.Screen name="Home" component={Authorized}/>
-        </Stack.Navigator>
-      </NavigationContainer>
-    </NativeBaseProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Sandbox"
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="Login" component={Login}/>
+            <Stack.Screen name="Home" component={AuthorizedViews}/>
+            <Stack.Screen name="Sandbox" component={Sandbox}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </NativeBaseProvider>
     </>
   );
 }

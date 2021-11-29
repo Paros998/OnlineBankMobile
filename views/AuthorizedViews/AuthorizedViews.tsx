@@ -4,10 +4,10 @@ import Home from "./Home/Home";
 
 const Stack = createNativeStackNavigator();
 
-const Authorized = () => {
+const AuthorizedViews = () => {
   return (
       <Stack.Screen name="HomePage" component={Home}/>
   );
 };
 
-export default Authorized;
+export default AuthorizedViews;

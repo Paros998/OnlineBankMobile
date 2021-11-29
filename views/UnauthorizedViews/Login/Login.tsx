@@ -20,6 +20,7 @@ import {UserCredentials} from "../../../interfaces/UserCredentials";
 import {User} from "../../../interfaces/User";
 import {Roles} from "../../../enums/Roles";
 import * as Yup from "yup";
+import { useNavigation } from '@react-navigation/native';
 
 const formikValues:UserCredentials = {
   username: '',
@@ -34,6 +35,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login:FC = () => {
+  const navigation = useNavigation();
 
   const handleSubmit = async (values:UserCredentials) => {
     const loginParams = appendUrlSearchParams(values);
@@ -86,6 +88,13 @@ const Login:FC = () => {
         alignItems='center'
         justifyContent='center'
       >
+        <Button
+          rounded='full'
+          onPress={() => navigation.navigate('Sandbox' as never)}
+        >
+          Sandbox
+        </Button>
+
         <Heading
           mt={4}
           mb={3}
