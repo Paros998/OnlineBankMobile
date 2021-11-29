@@ -6,7 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from "./views/UnauthorizedViews/Login/Login";
 import Authorized from "./views/AuthorizedViews/Authorized";
 import {initAxios} from "./utils/initAxios";
-
+import Payments from "./views/AuthorizedViews/Payments/Payments";
 
 const Stack = createNativeStackNavigator();
 initAxios();

@@ -1,12 +1,17 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from "./Home/Home";
 
-const Stack = createNativeStackNavigator();
+import Home from "./Home/Home";
+import Payments from "./Payments/Payments";
+import Transfers from "./Payments/Transfers";
+
 
 const Authorized = () => {
   return (
+    <>
+      <Stack.Screen name="Payments" component={Payments}/>
       <Stack.Screen name="HomePage" component={Home}/>
+      <Stack.Screen name="Transfers" component={Transfers}/>
+    </>
   );
 };
 
