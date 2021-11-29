@@ -1,4 +1,6 @@
 import React, {FC} from 'react';
+import {Platform} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {
   ArrowDownIcon,
   Button,
@@ -10,35 +12,38 @@ import {
 } from "native-base";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
-import { Formik } from 'formik';
+import {Formik} from 'formik';
 import * as SecureStore from 'expo-secure-store';
-
-import {appendUrlSearchParams} from "../../../utils/appendUrlSearchParams";
-import LoginForm from "../../../components/Login/LoginForm";
-
-import {UserCredentials} from "../../../interfaces/UserCredentials";
-import {User} from "../../../interfaces/User";
-import {Roles} from "../../../enums/Roles";
 import * as Yup from "yup";
 
-const formikValues:UserCredentials = {
+import {appendUrlSearchParams} from "../../../utils/appendUrlSearchParams";
+import LoginForm from "../../../components/Forms/LoginForm/LoginForm";
+import {UserCredentials} from "../../../interfaces/UserCredentials";
+import {User} from "../../../interfaces/User";
+import Logo from "../../../components/Logo/Logo";
+import Authorized from "../../AuthorizedViews/Authorized";
+import Home from "../../AuthorizedViews/Home/Home";
+
+const formikValues: UserCredentials = {
   username: '',
   password: ''
 }
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
-    .required("Username is Required").min(3,"Username must be at least 3 characters"),
+    .required("Username is Required").min(3, "Username must be at least 3 characters"),
   password: Yup.string()
-    .required("Password is Required").min(3,"Password must be at least 3 characters"),
+    .required("Password is Required").min(3, "Password must be at least 3 characters"),
 });
 
-const Login:FC = () => {
+const Login: FC = () => {
+  const toast = useToast();
+  const navigation = useNavigation();
 
-  const handleSubmit = async (values:UserCredentials) => {
+
+  const handleSubmit = async (values: UserCredentials) => {
     const loginParams = appendUrlSearchParams(values);
-    const toast = useToast();
-    console.log(values);
+
     try {
       const response = await axios.post(`/login`, loginParams);
 
@@ -46,22 +51,21 @@ const Login:FC = () => {
         const token = response.headers["authorization"];
         const user: User = jwtDecode(token);
         const role = user.authorities[0].authority;
-        //const token = await SecureStore.getItemAsync('secure_token'); na póżniej
+        //const token = await SecureStore.getItemAsync('JWT_USER_TOKEN'); na póżniej
 
-        if (role === Roles.RoleClient) {
-          toast.show({
-            title:"👍 Sukces logowania",
-            status: 'success',
-          });
-          axios.defaults.headers.common['Authorization'] = token;
-          await SecureStore.setItemAsync("JWT_USER_TOKEN", token);
+        toast.show({
+          title: "👍 Sukces logowania",
+          status: 'success',
+        });
 
-        } else {
-          toast.show({
-            title:"Ta aplikacja przeznaczona jest wyłącznie dla klientów",
-            status: 'warning',
-          });
-        }
+        axios.defaults.headers.common['Authorization'] = token;
+
+        Platform.OS === 'web'
+          ? localStorage.setItem("JWT_USER_TOKEN", token)
+          : await SecureStore.setItemAsync("JWT_USER_TOKEN", token);
+
+        navigation.navigate('Home' as never);
+
         //await currentUser?.fetchUser();
       }
     } catch (e: any) {
@@ -74,52 +78,46 @@ const Login:FC = () => {
 
   return (
     <View
-      backgroundColor='light.200'
-      width={"full"}
       height={"full"}
-      p={'0.5'}
-
+      w='full'
+      backgroundColor='dark.800'
+      alignItems='center'
+      justifyContent='center'
     >
-      <View
-        height={"full"}
-        backgroundColor='dark.800'
-        alignItems='center'
-        justifyContent='center'
+      <Logo/>
+      <Heading
+        mt={"1/6"}
+        mb={1}
+        color='light.50'
+        fontSize={"2xl"}
       >
-        <Heading
-          mt={4}
-          mb={3}
-          color='light.50'
-          fontSize={"5xl"}
-        >
-          Logowanie
+        Logowanie
+      </Heading>
+
+      <Formik<UserCredentials>
+        initialValues={formikValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        <LoginForm/>
+      </Formik>
+
+      <Divider my={4} w={"3/4"} backgroundColor='light.50'/>
+
+      <Center>
+        <Heading color='light.50' fontSize={"lg"} mb={3}>
+          Problemy z zalogowaniem?
         </Heading>
-
-        <Formik<UserCredentials>
-          initialValues={formikValues}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
+        <ArrowDownIcon size={'xl'} color='light.50'/>
+        <Button
+          mt={3}
+          rounded='full'
+          colorScheme='primary'
+          width={"2/3"}
         >
-          <LoginForm/>
-        </Formik>
-
-        <Divider my={4} w={"3/4"} backgroundColor='light.50'/>
-
-        <Center>
-          <Heading color='light.50' fontSize={"lg"} mb={3}>
-            Problemy z zalogowaniem?
-          </Heading>
-          <ArrowDownIcon size={'xl'} color='light.50'/>
-          <Button
-            mt={3}
-            rounded='full'
-            colorScheme='primary'
-            width={"2/3"}
-          >
-            Pomoc
-          </Button>
-        </Center>
-      </View>
+          Pomoc
+        </Button>
+      </Center>
     </View>
   );
 };
