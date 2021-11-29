@@ -3,10 +3,11 @@ import { extendTheme, NativeBaseProvider } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from "./views/UnauthorizedViews/Login/Login";
-import AuthorizedViews from "./views/AuthorizedViews/AuthorizedViews";
 import { initAxios } from "./utils/initAxios";
 import Sandbox from "./views/sandbox/Sandbox";
-
+import Authorized from "./views/AuthorizedViews/Authorized";
+import {initAxios} from "./utils/initAxios";
+import Payments from "./views/AuthorizedViews/Payments/Payments";
 
 const Stack = createNativeStackNavigator();
 initAxios();
