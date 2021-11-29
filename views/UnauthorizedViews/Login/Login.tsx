@@ -15,13 +15,11 @@ import jwtDecode from "jwt-decode";
 import {Formik} from 'formik';
 import * as SecureStore from 'expo-secure-store';
 import * as Yup from "yup";
-
 import {appendUrlSearchParams} from "../../../utils/appendUrlSearchParams";
 import LoginForm from "../../../components/Forms/LoginForm/LoginForm";
 import {UserCredentials} from "../../../interfaces/UserCredentials";
 import {User} from "../../../interfaces/User";
 import Logo from "../../../components/Logo/Logo";
-import Authorized from "../../AuthorizedViews/Authorized";
 import Home from "../../AuthorizedViews/Home/Home";
 
 const formikValues: UserCredentials = {
@@ -39,7 +37,6 @@ const validationSchema = Yup.object().shape({
 const Login: FC = () => {
   const toast = useToast();
   const navigation = useNavigation();
-
 
   const handleSubmit = async (values: UserCredentials) => {
     const loginParams = appendUrlSearchParams(values);
@@ -84,7 +81,16 @@ const Login: FC = () => {
       alignItems='center'
       justifyContent='center'
     >
-      <Logo/>
+      <Button
+        rounded='full'
+        mt='12'
+        onPress={() => navigation.navigate('Sandbox' as never)}
+      >
+        Sandbox
+      </Button>
+
+      <Logo position="fixed" top="10" />
+
       <Heading
         mt={"1/6"}
         mb={1}
