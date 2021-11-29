@@ -1,173 +1,129 @@
-import React from 'react';
+import React, {FC} from 'react';
+import {Platform} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {
   ArrowDownIcon,
   Button,
   Center,
   Divider,
-  FormControl,
   Heading,
-  Input,
   View,
-  VStack
+  useToast
 } from "native-base";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+import {Formik} from 'formik';
+import * as SecureStore from 'expo-secure-store';
+import * as Yup from "yup";
+import {appendUrlSearchParams} from "../../../utils/appendUrlSearchParams";
+import LoginForm from "../../../components/Forms/LoginForm/LoginForm";
 import {UserCredentials} from "../../../interfaces/UserCredentials";
-import {UserCredentialsValidation} from "../../../interfaces/UserCredentialsValidation";
+import {User} from "../../../interfaces/User";
+import Logo from "../../../components/Logo/Logo";
+import Home from "../../AuthorizedViews/Home/Home";
 
-const Login = () => {
+const formikValues: UserCredentials = {
+  username: '',
+  password: ''
+}
 
-  const [data,setData] = React.useState<UserCredentials>({
-    login: '' ,
-    password: ''
-  });
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .required("Username is Required").min(3, "Username must be at least 3 characters"),
+  password: Yup.string()
+    .required("Password is Required").min(3, "Password must be at least 3 characters"),
+});
 
-  const [errors,setErrors] = React.useState<UserCredentialsValidation>({
-    login: false ,
-    password: false
-  });
+const Login: FC = () => {
+  const toast = useToast();
+  const navigation = useNavigation();
 
-  const validate = () => {
-    if(data.login.length <= 0){
-      setErrors({
-        ...errors,
-        login: true
-      });
+  const handleSubmit = async (values: UserCredentials) => {
+    const loginParams = appendUrlSearchParams(values);
 
-    }else{
-      setErrors({
-        ...errors,
-        login: false
+    try {
+      const response = await axios.post(`/login`, loginParams);
+
+      if (response.status === 200) {
+        const token = response.headers["authorization"];
+        const user: User = jwtDecode(token);
+        const role = user.authorities[0].authority;
+        //const token = await SecureStore.getItemAsync('JWT_USER_TOKEN'); na póżniej
+
+        toast.show({
+          title: "👍 Sukces logowania",
+          status: 'success',
+        });
+
+        axios.defaults.headers.common['Authorization'] = token;
+
+        Platform.OS === 'web'
+          ? localStorage.setItem("JWT_USER_TOKEN", token)
+          : await SecureStore.setItemAsync("JWT_USER_TOKEN", token);
+
+        navigation.navigate('Home' as never);
+
+        //await currentUser?.fetchUser();
+      }
+    } catch (e: any) {
+      toast.show({
+        title: '👎 Nie udało się zalogować',
+        status: 'error',
       });
     }
-
-    if(data.password.length <= 0){
-      setErrors({
-        ...errors,
-        password: true
-      });
-    }else{
-      setErrors({
-        ...errors,
-        password: false
-      });
-    }
-
-    if(errors.login || errors.password)
-      return false;
-
-    return  true;
-  }
-
-  const onSubmit = () => {
-    validate() ? console.log('Validation true') : console.log('Validation false');
   }
 
   return (
     <View
-      backgroundColor='light.400'
-      width={"full"}
       height={"full"}
-      p={'0.5'}
-
+      w='full'
+      backgroundColor='dark.800'
+      alignItems='center'
+      justifyContent='center'
     >
-      <View
-        height={"full"}
-        backgroundColor='dark.800'
-        alignItems='center'
+      <Button
+        rounded='full'
+        mt='12'
+        onPress={() => navigation.navigate('Sandbox' as never)}
       >
-        <Heading
-          mt={4}
-          mb={3}
-          color='light.50'
-          fontSize={"5xl"}
-        >
-          Logowanie
+        Sandbox
+      </Button>
+
+      <Logo position="fixed" top="10" />
+
+      <Heading
+        mt={"1/6"}
+        mb={1}
+        color='light.50'
+        fontSize={"2xl"}
+      >
+        Logowanie
+      </Heading>
+
+      <Formik<UserCredentials>
+        initialValues={formikValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        <LoginForm/>
+      </Formik>
+
+      <Divider my={4} w={"3/4"} backgroundColor='light.50'/>
+
+      <Center>
+        <Heading color='light.50' fontSize={"lg"} mb={3}>
+          Problemy z zalogowaniem?
         </Heading>
-
-        <VStack
-          space={4}
-          mt={3}
-          backgroundColor='primary.500'
-          width='4/5'
-          rounded={"xl"}
-          height={'2/5'}
-          p={3}
-          pt={5}
-          pb={5}
-        >
-          <FormControl isRequired>
-            <FormControl.Label >
-              Login
-            </FormControl.Label>
-            <Input
-              color='dark.800'
-              backgroundColor={'light.50'}
-              placeholder={'Login...'}
-              onChangeText={
-                (value) => setData({...data,login: value})
-              }
-            />
-            {errors.login ?
-            <FormControl.ErrorMessage _text={{fontSize: 'xs',color:'light.50',fontWeight: 500}}>
-                Login nie może być pusty!
-            </FormControl.ErrorMessage>
-              : <FormControl.HelperText _text={{fontSize: 'xs'}}>
-                Nazwa do logowania
-              </FormControl.HelperText>
-            }
-          </FormControl>
-
-          <FormControl mt={5} isRequired>
-            <FormControl.Label>
-              Hasło
-            </FormControl.Label>
-            <Input
-              type='password'
-              color='dark.800'
-              backgroundColor={'light.50'}
-              placeholder={'Hasło...'}
-              onChangeText={
-                (value) => setData({...data,password: value})
-              }
-            />
-            {errors.password ?
-              <FormControl.ErrorMessage  _text={{fontSize: 'xs',color:'light.100',fontWeight: 500}}>
-                Hasło nie może być puste!
-            </FormControl.ErrorMessage>
-              : <FormControl.HelperText _text={{fontSize: 'xs'}}>
-                Hasło do logowania
-              </FormControl.HelperText>
-            }
-          </FormControl>
-
-        </VStack>
+        <ArrowDownIcon size={'xl'} color='light.50'/>
         <Button
-          mt={5}
+          mt={3}
           rounded='full'
           colorScheme='primary'
-          width={"1/2"}
-          onPress={onSubmit}
+          width={"2/3"}
         >
-          Zaloguj
+          Pomoc
         </Button>
-
-        <Divider my={4} w={"3/4"} backgroundColor='light.50'/>
-
-        <Center>
-          <Heading color='light.50' fontSize={"lg"} mb={3}>
-            Problemy z zalogowaniem?
-          </Heading>
-          <ArrowDownIcon size={'xl'} color='light.50'/>
-          <Button
-            mt={3}
-            rounded='full'
-            colorScheme='primary'
-            width={"2/3"}
-          >
-            Pomoc
-          </Button>
-        </Center>
-
-      </View>
+      </Center>
     </View>
   );
 };
