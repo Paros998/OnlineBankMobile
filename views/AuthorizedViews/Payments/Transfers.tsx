@@ -15,7 +15,7 @@ const Transfers:FC<TransferFormProps> = ({showAdditionalInputs}) => {
       justifyContent='center'
       p={2}
     >
-      <Logo/>
+      <Logo position="fixed" top="10" />
       <Center w={5/6}>
 
       </Center>

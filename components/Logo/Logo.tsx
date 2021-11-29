@@ -1,18 +1,19 @@
-import React from 'react';
-import {Box, HStack, Image, Text} from "native-base"
+import React, { FC } from 'react';
+import { Box, HStack, IBoxProps, Image, Text } from "native-base"
 
 const img = require("../../assets/logo.png");
 
-const Logo = () => {
+const Logo: FC<IBoxProps> = (props) => {
   return (
-    <Box position="fixed" top="10">
+    <Box {...props}>
       <HStack alignItems={"center"}>
         <Image
-        source={img}
-        alt='logo'
-        w="12"
-        h="12"
+          source={img}
+          alt='logo'
+          w="12"
+          h="12"
         />
+
         <Text color='light.50' ml={2} fontSize={"2xl"}>
           Future Bank
         </Text>
