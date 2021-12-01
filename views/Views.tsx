@@ -6,6 +6,7 @@ import AuthorizedViews from "./AuthorizedViews/AuthorizedViews";
 import Sandbox from "./UnauthorizedViews/Sandbox/Sandbox";
 import { NativeBaseProvider } from "native-base";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Help from "./UnauthorizedViews/Help/Help";
 
 const Stack = createNativeStackNavigator();
 // TODO Add User context
@@ -18,6 +19,7 @@ const Views = () => {
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="Login" component={Login}/>
+          <Stack.Screen name="Help" component={Help}/>
           <Stack.Screen name="Home" component={AuthorizedViews}/>
           <Stack.Screen name="Sandbox" component={Sandbox}/>
         </Stack.Navigator>

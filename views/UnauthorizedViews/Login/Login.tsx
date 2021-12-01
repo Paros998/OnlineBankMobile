@@ -29,9 +29,9 @@ const formikValues: UserCredentials = {
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
-    .required("Username is Required").min(3, "Username must be at least 3 characters"),
+    .required("Login jest wymagany").min(3, "Login musi zawierać co najmniej 3 znaki"),
   password: Yup.string()
-    .required("Password is Required").min(3, "Password must be at least 3 characters"),
+    .required("Hasło jest wymagane").min(3, "Hasło musi zawierać co najmniej 3 znaki"),
 });
 
 const Login: FC = () => {
@@ -120,6 +120,7 @@ const Login: FC = () => {
           rounded='full'
           colorScheme='primary'
           width={"2/3"}
+          onPress={() => navigation.navigate('Help' as never)}
         >
           Pomoc
         </Button>
