@@ -4,9 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import { Box, Button, Card, Center, Heading, Text, View } from "native-base";
 import Logo from "../../../components/Logo/Logo";
 import RecentTransactions from "./RecentTransactions";
+import { useCurrentUser } from "../../../contexts/CurrentUserProvider";
 
 const Home: FC = () => {
   const navigation = useNavigation();
+  const { currentUser, handleLogout } = useCurrentUser();
+
   return (
     <View backgroundColor='dark.800' h='full'>
       <Box
@@ -27,7 +30,9 @@ const Home: FC = () => {
               name='power-standby'
               size={40}
               color='white'
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                handleLogout().then(() => navigation.navigate('Home' as never));
+              }}
             />
           </Box>
 
@@ -50,7 +55,7 @@ const Home: FC = () => {
           </Text>
 
           <Text color='black' bold fontSize={18}>
-            3213,90 PLN
+            {currentUser?.balance}
           </Text>
         </Card>
       </Box>

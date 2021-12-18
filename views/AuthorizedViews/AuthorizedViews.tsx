@@ -7,6 +7,7 @@ import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { BsPerson } from "react-icons/bs";
 import Account from "./Account/Account";
 import PaymentsHome from "./Payments/PaymentsHome";
+import { NavigationContainer } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,27 +21,31 @@ const navigatorOptions: BottomTabNavigationOptions = {
 
 const homeScreenOptions: BottomTabNavigationOptions = {
   tabBarIcon: ({ size }) => <AiOutlineHome size={size + 5}/>,
+  title: "Strona główna",
 };
 
 const paymentsScreenOptions: BottomTabNavigationOptions = {
   tabBarIcon: ({ size }) => <FaRegMoneyBillAlt size={size + 5}/>,
+  title: "Płatności",
 };
 
 const accountScreenOptions: BottomTabNavigationOptions = {
   tabBarIcon: ({ size }) => <BsPerson size={size + 5}/>,
+  title: "Konto",
 };
 
 const AuthorizedViews = () => {
   return (
-    <Tab.Navigator
-      initialRouteName='Home'
-      screenOptions={navigatorOptions}
-    >
-      <Tab.Screen
-        name='Home'
-        component={Home}
-        options={homeScreenOptions}
-      />
+    <NavigationContainer>
+      <Tab.Navigator
+        initialRouteName='Home'
+        screenOptions={navigatorOptions}
+      >
+        <Tab.Screen
+          name='Home'
+          component={Home}
+          options={homeScreenOptions}
+        />
 
       <Tab.Screen
         name='PaymentsHome'
@@ -48,12 +53,13 @@ const AuthorizedViews = () => {
         options={paymentsScreenOptions}
       />
 
-      <Tab.Screen
-        name='Account'
-        component={Account}
-        options={accountScreenOptions}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name='Account'
+          component={Account}
+          options={accountScreenOptions}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 };
 

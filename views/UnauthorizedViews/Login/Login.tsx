@@ -20,7 +20,7 @@ import LoginForm from "../../../components/Forms/LoginForm/LoginForm";
 import {UserCredentials} from "../../../interfaces/UserCredentials";
 import {User} from "../../../interfaces/User";
 import Logo from "../../../components/Logo/Logo";
-import Home from "../../AuthorizedViews/Home/Home";
+import { useCurrentUser } from "../../../contexts/CurrentUserProvider";
 
 const formikValues: UserCredentials = {
   username: '',
@@ -37,6 +37,7 @@ const validationSchema = Yup.object().shape({
 const Login: FC = () => {
   const toast = useToast();
   const navigation = useNavigation();
+  const currentUser = useCurrentUser();
 
   const handleSubmit = async (values: UserCredentials) => {
     const loginParams = appendUrlSearchParams(values);
@@ -61,9 +62,7 @@ const Login: FC = () => {
           ? localStorage.setItem("JWT_USER_TOKEN", token)
           : await SecureStore.setItemAsync("JWT_USER_TOKEN", token);
 
-        navigation.navigate('Home' as never);
-
-        //await currentUser?.fetchUser();
+        await currentUser?.fetchUser();
       }
     } catch (e: any) {
       toast.show({
