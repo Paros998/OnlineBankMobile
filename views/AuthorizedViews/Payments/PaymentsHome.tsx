@@ -1,0 +1,39 @@
+import React from 'react';
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import Payments from "./Payments";
+import Transfers from "./Transfers";
+import History from "./History";
+import QrPayment from "./QRPayment";
+
+const Drawer = createDrawerNavigator();
+
+const PaymentsHome = () => {
+  return (
+    <Drawer.Navigator
+      initialRouteName="Payments"
+      screenOptions={{
+        headerStyle:{
+          height: 50,
+          backgroundColor: '#d51111',
+          borderBottomColor: '#d51111',
+
+        },drawerStyle:{
+          backgroundColor: '#800000',
+          maxWidth: '50%'
+        },drawerContentStyle:{
+          padding: 5,
+        },drawerActiveTintColor: '#bfbfbf',
+        drawerInactiveTintColor: '#737373',
+        headerTintColor : '#bfbfbf'
+
+      }}
+    >
+      <Drawer.Screen name="Payments" options={{title:'Płatności'}} component={Payments}/>
+      <Drawer.Screen name="QRPayment" options={{title:'Płatność po QR'}} component={QrPayment}/>
+      <Drawer.Screen name="Transfers" options={{title:'Przelewy'}} component={Transfers}/>
+      <Drawer.Screen name="History" options={{title:'Historia'}} component={History}/>
+    </Drawer.Navigator>
+  );
+};
+
+export default PaymentsHome;

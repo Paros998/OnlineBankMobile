@@ -6,6 +6,7 @@ import { AiOutlineHome } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { BsPerson } from "react-icons/bs";
 import Account from "./Account/Account";
+import PaymentsHome from "./Payments/PaymentsHome";
 import { NavigationContainer } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
@@ -46,11 +47,11 @@ const AuthorizedViews = () => {
           options={homeScreenOptions}
         />
 
-        <Tab.Screen
-          name='Payments'
-          component={Payments}
-          options={paymentsScreenOptions}
-        />
+      <Tab.Screen
+        name='PaymentsHome'
+        component={PaymentsHome}
+        options={paymentsScreenOptions}
+      />
 
         <Tab.Screen
           name='Account'
