@@ -48,7 +48,7 @@ const Login: FC = () => {
         const token = response.headers["authorization"];
         const user: User = jwtDecode(token);
         const role = user.authorities[0].authority;
-        //const token = await SecureStore.getItemAsync('JWT_USER_TOKEN'); na póżniej
+        
 
         toast.show({
           title: "👍 Sukces logowania",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Text, IconButton, View, HStack } from "native-base";
+import {Center, Text, IconButton, View, HStack, Button} from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 import Logo from "../../../components/Logo/Logo";
@@ -18,7 +18,7 @@ const Payments = () => {
       justifyContent='center'
       p={2}
     >
-      <Logo position="fixed" top="10"/>
+      <Logo position="fixed" top="16"/>
 
       <Center w='5/6'>
         <View
@@ -30,7 +30,9 @@ const Payments = () => {
           <HStack alignItems="center">
             <IconButton
               icon={<MaterialCommunityIcons name="bank-transfer-out" size={72}/>}
-              onPress={() => navigation.navigate(Transfers as never)}
+              onPress={() => navigation.navigate('Transfers' as never,{
+                type: 'normal'
+              } as never)}
             />
 
             <Text
@@ -49,17 +51,18 @@ const Payments = () => {
           w='full'
         >
           <HStack alignItems="center">
-            <IconButton
-              icon={<MaterialCommunityIcons name="transfer" size={72}/>}
-              onPress={() => navigation.navigate(Transfers as never)}
-            />
-
-            <Text
-              fontSize='md'
-              color='dark.800'
-            >
-              Przelew Cykliczny
-            </Text>
+              <IconButton
+                icon={<MaterialCommunityIcons name="transfer" size={72}/>}
+                onPress={() => navigation.navigate('Transfers' as never,{
+                  type: 'cyclical'
+                } as never)}
+              />
+              <Text
+                fontSize='md'
+                color='dark.800'
+              >
+                Przelew Cykliczny
+              </Text>
           </HStack>
         </View>
       </Center>
