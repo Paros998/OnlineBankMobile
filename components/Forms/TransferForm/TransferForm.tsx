@@ -1,21 +1,24 @@
 import React from 'react';
 import {Form, useFormikContext} from "formik";
 import {Button, FormControl, ScrollView, Select, View, VStack} from "native-base";
-import SelectControl, {Icon, Input, SubmitButton} from "@native-base/formik-ui";
+import {Input, SubmitButton} from "@native-base/formik-ui";
 import {TransferData} from "../../../interfaces/TransferData";
 import {useNavigation} from "@react-navigation/native";
 
 
 const TransferForm = () => {
-  const {errors,handleChange} = useFormikContext<TransferData>()
+  const {errors, setFieldValue, resetForm} = useFormikContext<TransferData>()
   const navigation = useNavigation();
 
   return (
+
     <Form
-      style={{width:"100%"}}
+      style={{width: "100%", height: "80%"}}
     >
       <ScrollView
         w={"full"}
+        height={"full"}
+        mb={"16"}
         contentContainerStyle={{
           alignItems: "center"
         }}
@@ -56,17 +59,67 @@ const TransferForm = () => {
               color='dark.800'
               backgroundColor='light.50'
               placeholder='Kategoria'
+              w={"full"}
               onValueChange={(itemValue) => {
-                handleChange(itemValue);
+                setFieldValue("category", itemValue);
               }}
             >
-              <Select.Item label="Wynagrodzenie" value="Wynagrodzenie" />
-              <Select.Item label="Twoja Stara" value="Twoja Stara" />
+              <Select.Item label="Wynagrodzenie" value="Wynagrodzenie" size={"1/2"}/>
+              <Select.Item label="Twoja Stara" value="Twoja Stara"/>
             </Select>
             <FormControl.ErrorMessage>
               {errors.category}
             </FormControl.ErrorMessage>
           </FormControl>
+
+          <FormControl isRequired isInvalid={errors.receiver_sender as never}>
+            <FormControl.Label _text={{fontSize: "xl"}}>
+              Odbiorca
+            </FormControl.Label>
+            <Input
+              name='receiver_sender'
+              color='dark.800'
+              backgroundColor='light.50'
+              size="xl"
+              placeholder={'Jan Kowalski ...'}
+            />
+            <FormControl.ErrorMessage>
+              {errors.receiver_sender}
+            </FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl isRequired isInvalid={errors.title as never}>
+            <FormControl.Label _text={{fontSize: "xl"}}>
+              Tytuł
+            </FormControl.Label>
+            <Input
+              name='title'
+              color='dark.800'
+              backgroundColor='light.50'
+              size="xl"
+              placeholder={'Opłata prąd, lipiec ...'}
+            />
+            <FormControl.ErrorMessage>
+              {errors.title}
+            </FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl isRequired isInvalid={errors.toAccountNumber as never}>
+            <FormControl.Label _text={{fontSize: "xl"}}>
+              Rachunek odbiorcy
+            </FormControl.Label>
+            <Input
+              name='toAccountNumber'
+              color='dark.800'
+              backgroundColor='light.50'
+              size="xl"
+              placeholder={'001501235121233231...'}
+            />
+            <FormControl.ErrorMessage>
+              {errors.toAccountNumber}
+            </FormControl.ErrorMessage>
+          </FormControl>
+
 
         </VStack>
         <View
@@ -82,11 +135,23 @@ const TransferForm = () => {
             Wykonaj
           </SubmitButton>
           <Button
+            mt={3}
+            mb={5}
+            rounded='full'
+            colorScheme='danger'
+            width="1/2"
+            onPress={() => {
+              resetForm();
+            }}
+          >
+            Resetuj
+          </Button>
+          <Button
             mt={5}
             rounded='full'
             colorScheme='secondary'
             width="1/3"
-            onPress={()=>{
+            onPress={() => {
               navigation.goBack();
             }}
           >

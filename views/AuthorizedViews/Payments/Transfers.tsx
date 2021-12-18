@@ -18,11 +18,15 @@ const validationSchema = Yup.object().shape({
 
 const Transfers = () => {
   const route = useRoute();
-  const {type}:{type:string} = route.params as {type:string};
+  let params:{type:string};
+
+  if(route.params)
+    params = route.params as {type:string};
+  else params = {type: 'normal'}
 
   const handleSubmit = async () =>{
 
-    if(type === 'normal'){
+    if(params.type === 'normal'){
 
     }else{
 
@@ -39,7 +43,7 @@ const Transfers = () => {
       p={2}
     >
       <Logo position="fixed" top="16" />
-        {type === 'normal'
+        {params.type === 'normal'
           ? (
             <Formik<TransferData>
               initialValues={TransferDataInitialValues}

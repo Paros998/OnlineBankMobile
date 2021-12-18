@@ -3,6 +3,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Payments from "./Payments";
 import Transfers from "./Transfers";
 import History from "./History";
+import QrPayment from "./QRPayment";
 
 const Drawer = createDrawerNavigator();
 
@@ -27,7 +28,8 @@ const PaymentsHome = () => {
 
       }}
     >
-      <Drawer.Screen name="Payments" options={{title:'Płatności'}}   component={Payments}/>
+      <Drawer.Screen name="Payments" options={{title:'Płatności'}} component={Payments}/>
+      <Drawer.Screen name="QRPayment" options={{title:'Płatność po QR'}} component={QrPayment}/>
       <Drawer.Screen name="Transfers" options={{title:'Przelewy'}} component={Transfers}/>
       <Drawer.Screen name="History" options={{title:'Historia'}} component={History}/>
     </Drawer.Navigator>
