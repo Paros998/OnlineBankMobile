@@ -1,31 +1,30 @@
 import React from 'react';
-import { overriddenTheme } from "../constants/overriddenTheme";
-import { NavigationContainer } from "@react-navigation/native";
-import Login from "./UnauthorizedViews/Login/Login";
 import AuthorizedViews from "./AuthorizedViews/AuthorizedViews";
-import Sandbox from "./UnauthorizedViews/Sandbox/Sandbox";
-import { NativeBaseProvider } from "native-base";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Help from "./UnauthorizedViews/Help/Help";
+import { useCurrentUser } from "../contexts/CurrentUserProvider";
+import UnauthorizedViews from "./UnauthorizedViews/UnauthorizedViews";
+import CenteredSpinner from "../components/CenteredSpinner/CenteredSpinner";
+import { View } from "native-base";
 
-const Stack = createNativeStackNavigator();
-// TODO Add User context
 const Views = () => {
-  return (
-    <NativeBaseProvider theme={overriddenTheme}>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Login"
-          screenOptions={{ headerShown: false }}
-        >
-          <Stack.Screen name="Login" component={Login}/>
-          <Stack.Screen name="Help" component={Help}/>
-          <Stack.Screen name="Home" component={AuthorizedViews}/>
-          <Stack.Screen name="Sandbox" component={Sandbox}/>
-        </Stack.Navigator>
-      </NavigationContainer>
-    </NativeBaseProvider>
-  );
+  const { currentUser, isPending } = useCurrentUser();
+
+  if (isPending) {
+    return (
+      <View h='full'>
+        <CenteredSpinner
+          isPending={isPending}
+          color='primary.500'
+          size='lg'
+        />
+      </View>
+    );
+  }
+
+  if (currentUser) {
+    return <AuthorizedViews/>
+  }
+
+  return <UnauthorizedViews/>;
 };
 
 export default Views;
