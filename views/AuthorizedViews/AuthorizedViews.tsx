@@ -19,14 +19,17 @@ const navigatorOptions: BottomTabNavigationOptions = {
 
 const homeScreenOptions: BottomTabNavigationOptions = {
   tabBarIcon: ({ size }) => <AiOutlineHome size={size + 5}/>,
+  title: "Strona główna",
 };
 
 const paymentsScreenOptions: BottomTabNavigationOptions = {
   tabBarIcon: ({ size }) => <FaRegMoneyBillAlt size={size + 5}/>,
+  title: "Płatności",
 };
 
 const accountScreenOptions: BottomTabNavigationOptions = {
   tabBarIcon: ({ size }) => <BsPerson size={size + 5}/>,
+  title: "Konto",
 };
 
 const AuthorizedViews = () => {
