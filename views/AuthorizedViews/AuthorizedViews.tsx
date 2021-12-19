@@ -1,6 +1,5 @@
 import React from 'react';
 import Home from "./Home/Home";
-import Payments from "./Payments/Payments";
 import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
