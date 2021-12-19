@@ -1,14 +1,24 @@
-import React from 'react';
+import React, {FC, useState} from 'react';
 import {Form, useFormikContext} from "formik";
-import {Button, FormControl, ScrollView, Select, View, VStack} from "native-base";
+import {Button, FormControl, ScrollView, View, VStack} from "native-base";
 import {Input, SubmitButton} from "@native-base/formik-ui";
 import {TransferData} from "../../../interfaces/TransferData";
 import {useNavigation} from "@react-navigation/native";
+import { DatePicker,Select } from 'antd';
+import {useFetchRawData} from "../../../hooks/useFetchRawData";
+import QRCodeScanner from "react-native-qrcode-scanner";
+import {RNCamera} from "react-native-camera";
 
+interface TransferFormProps{
+  type:string;
+}
 
-const TransferForm = () => {
-  const {errors, setFieldValue, resetForm} = useFormikContext<TransferData>()
+const TransferForm:FC<TransferFormProps> = ({type}) => {
+  const {errors, setFieldValue, resetForm} = useFormikContext<TransferData>();
   const navigation = useNavigation();
+  const [scan,setScan] = useState<boolean>(false);
+
+  const {rawData} = useFetchRawData<string[]>("/rest/transfers/categories");
 
   return (
 
@@ -51,22 +61,72 @@ const TransferForm = () => {
             </FormControl.ErrorMessage>
           </FormControl>
 
-          <FormControl mt={5} isRequired isInvalid={errors.category as never}>
+          <Button
+            onPress={()=>{
+              setScan(true);
+            }}
+            colorScheme='dark'
+          >
+            QR Skan Kwoty
+          </Button>
+
+          {/*{*/}
+          {/*  scan &&*/}
+          {/*  <QRCodeScanner*/}
+          {/*      onRead={({rawData})=>{*/}
+          {/*        if(!rawData)*/}
+          {/*          alert("Couldn't read the value properly");*/}
+          {/*        else*/}
+          {/*          setFieldValue("amount",rawData);*/}
+          {/*        setScan(false);*/}
+          {/*      }}*/}
+          {/*  >*/}
+          {/*  </QRCodeScanner>*/}
+          {/*}*/}
+
+          {
+            type === "cyclical" && (
+              <FormControl isRequired isInvalid={errors.transferDate as never}>
+                <FormControl.Label _text={{fontSize: "xl"}}>
+                  Data realizacji cyklicznej
+                </FormControl.Label>
+                <DatePicker
+                  format={"YYYY-MM-DD"}
+                  onChange={(date) => {
+                    setFieldValue("transferDate",date);
+                  }}
+                />
+                <FormControl.ErrorMessage>
+                  {errors.transferDate}
+                </FormControl.ErrorMessage>
+              </FormControl>
+            )
+          }
+
+          <FormControl isRequired isInvalid={errors.category as never}>
             <FormControl.Label _text={{fontSize: "xl"}}>
               Kategoria
             </FormControl.Label>
+
             <Select
-              color='dark.800'
-              backgroundColor='light.50'
+              style={{
+                backgroundColor: 'light.50'
+              }}
               placeholder='Kategoria'
-              w={"full"}
-              onValueChange={(itemValue) => {
+              onChange={(itemValue) => {
                 setFieldValue("category", itemValue);
               }}
             >
-              <Select.Item label="Wynagrodzenie" value="Wynagrodzenie" size={"1/2"}/>
-              <Select.Item label="Twoja Stara" value="Twoja Stara"/>
+              {
+                rawData && rawData.length > 0 && rawData.map((value) => (
+                      <Select.Option value={value} >
+                        {value}
+                      </Select.Option>
+                  )
+                )
+              }
             </Select>
+
             <FormControl.ErrorMessage>
               {errors.category}
             </FormControl.ErrorMessage>
@@ -138,7 +198,8 @@ const TransferForm = () => {
             mt={3}
             mb={5}
             rounded='full'
-            colorScheme='danger'
+            colorScheme='light'
+            variant={'subtle'}
             width="1/2"
             onPress={() => {
               resetForm();
