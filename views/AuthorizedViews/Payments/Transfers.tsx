@@ -1,5 +1,5 @@
 import React from 'react';
-import {useToast, View} from 'native-base';
+import { Button, useToast, View } from 'native-base';
 import Logo from "../../../components/Logo/Logo";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import TransferForm from "../../../components/Forms/TransferForm/TransferForm";
@@ -123,6 +123,17 @@ const Transfers = () => {
         <TransferForm type={params.type}/>
       </Formik>
 
+      <Button
+        mt={5}
+        rounded='full'
+        colorScheme='secondary'
+        width="1/3"
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        Wstecz
+      </Button>
     </View>
   );
 };
