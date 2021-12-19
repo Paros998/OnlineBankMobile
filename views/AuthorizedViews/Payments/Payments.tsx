@@ -21,7 +21,6 @@ const Payments = () => {
       <Logo position="fixed" top="16"/>
 
       <Center w='5/6'>
-
         <View
           bgColor='light.50'
           rounded='2xl'
@@ -30,33 +29,7 @@ const Payments = () => {
         >
           <Pressable
             onPress={() => navigation.navigate('Transfers' as never, {
-              type: 'cyclical'
-            } as never)}
-          >
-            <HStack alignItems="center">
-              <IconButton
-                icon={<MaterialCommunityIcons name="qrcode-scan" size={72}/>}
-              />
-
-              <Text
-                fontSize='md'
-                color='dark.800'
-              >
-                Zapłać skanując QR
-              </Text>
-            </HStack>
-          </Pressable>
-        </View>
-
-        <View
-          bgColor='light.50'
-          rounded='2xl'
-          m={2}
-          w='full'
-        >
-          <Pressable
-            onPress={() => navigation.navigate('Transfers' as never, {
-              type: 'cyclical'
+              type: 'normal'
             } as never)}
           >
             <HStack alignItems="center">
@@ -94,6 +67,31 @@ const Payments = () => {
                 color='dark.800'
               >
                 Przelew Cykliczny
+              </Text>
+            </HStack>
+          </Pressable>
+        </View>
+
+        <View
+          bgColor='light.50'
+          rounded='2xl'
+          m={2}
+          w='full'
+        >
+          <Pressable
+            onPress={() => navigation.navigate('CyclicalTransfers' as never, {
+              type: 'cyclical'
+            } as never)}
+          >
+            <HStack alignItems="center">
+              <IconButton
+                icon={<MaterialCommunityIcons name="server" size={72}/>}
+              />
+              <Text
+                fontSize='md'
+                color='dark.800'
+              >
+                Zapisane Przelewy
               </Text>
             </HStack>
           </Pressable>

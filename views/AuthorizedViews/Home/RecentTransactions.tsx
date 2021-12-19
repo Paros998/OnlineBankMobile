@@ -4,8 +4,9 @@ import { useFetchRawData } from "../../../hooks/useFetchRawData";
 import { TransferModel } from "../../../interfaces/TransferModel";
 import { useCurrentUser } from "../../../contexts/CurrentUserProvider";
 import CenteredSpinner from "../../../components/CenteredSpinner/CenteredSpinner";
+import {TransferType} from "../../../enums/TransferType";
 
-const getCashColor = (amount: number) => amount > 0 ? 'green.500' : 'black';
+const getCashColor = (type:string) => type === TransferType.Incoming ? 'green.500' : 'primary.500';
 
 const RecentTransactions: FC = () => {
   const { currentUser } = useCurrentUser();
@@ -40,7 +41,7 @@ const RecentTransactions: FC = () => {
                 </Text>
               </Box>
 
-              <Heading color={getCashColor(transfer.amount)} fontSize={15}>
+              <Heading color={getCashColor(transfer.type)} fontSize={15}>
                 {transfer.amount.toFixed(2)} PLN
               </Heading>
             </Box>

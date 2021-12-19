@@ -3,7 +3,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Payments from "./Payments";
 import Transfers from "./Transfers";
 import History from "./History";
-import QrPayment from "./QRPayment";
+import CyclicalTransfers from "./CyclicalTransfers";
 
 const Drawer = createDrawerNavigator();
 
@@ -19,7 +19,7 @@ const PaymentsHome = () => {
 
         },drawerStyle:{
           backgroundColor: '#800000',
-          maxWidth: '50%'
+          maxWidth: '75%'
         },drawerContentStyle:{
           padding: 5,
         },drawerActiveTintColor: '#bfbfbf',
@@ -29,8 +29,8 @@ const PaymentsHome = () => {
       }}
     >
       <Drawer.Screen name="Payments" options={{title:'Płatności'}} component={Payments}/>
-      <Drawer.Screen name="QRPayment" options={{title:'Płatność po QR'}} component={QrPayment}/>
       <Drawer.Screen name="Transfers" options={{title:'Przelewy'}} component={Transfers}/>
+      <Drawer.Screen name="CyclicalTransfers" options={{title:'Zdefiniowane przelewy'}} component={CyclicalTransfers}/>
       <Drawer.Screen name="History" options={{title:'Historia'}} component={History}/>
     </Drawer.Navigator>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const QrPayment = () => {
+const CyclicalTransfers = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const QrPayment = () => {
   );
 };
 
-export default QrPayment;
+export default CyclicalTransfers;

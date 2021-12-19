@@ -1,7 +1,7 @@
 import { ClientModel } from "./ClientModel";
 
 export interface CyclicalTransferModel {
-  transferId: number;
+  transferId?: number;
   amount: number;
   reTransferDate: string;
   category: string;

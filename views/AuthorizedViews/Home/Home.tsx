@@ -63,12 +63,17 @@ const Home: FC = () => {
       <RecentTransactions/>
 
       <Center>
-        <Button w='1/2'>
+        <Button
+          w='1/2'
+          onPress={()=>{
+            navigation.navigate('History' as never);
+          }}
+        >
           Zobacz więcej w historii
         </Button>
       </Center>
     </View>
   );
 };
-
+//TODO fix navigation
 export default Home;
