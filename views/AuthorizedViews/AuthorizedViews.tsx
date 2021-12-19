@@ -7,6 +7,7 @@ import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { BsPerson } from "react-icons/bs";
 import Account from "./Account/Account";
 import { NavigationContainer } from "@react-navigation/native";
+import History from "./History/History";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,6 +57,11 @@ const AuthorizedViews = () => {
           name='Account'
           component={Account}
           options={accountScreenOptions}
+        />
+
+        <Tab.Screen
+          name='History'
+          component={History}
         />
       </Tab.Navigator>
     </NavigationContainer>

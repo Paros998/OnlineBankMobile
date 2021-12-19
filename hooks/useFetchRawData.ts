@@ -19,7 +19,7 @@ export const useFetchRawData = <T extends unknown>(endpoint: string, params?: an
 
   useEffect(() => {
     fetchData().catch();
-  }, [fetchData]);
+  }, [fetchData, params]);
 
   return { rawData, fetchData, isPending };
 };

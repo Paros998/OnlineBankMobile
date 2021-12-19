@@ -12,7 +12,7 @@ const Views = () => {
   }
 
   if (currentUser) {
-    return <AuthorizedViews/>
+    return <AuthorizedViews/>;
   }
 
   return <UnauthorizedViews/>;
