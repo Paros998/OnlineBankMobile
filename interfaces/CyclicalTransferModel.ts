@@ -1,13 +1,12 @@
 import { ClientModel } from "./ClientModel";
 
-export interface TransferModel {
+export interface CyclicalTransferModel {
   transferId?: number;
   amount: number;
-  transferDate: string;
+  reTransferDate: string;
   category: string;
-  type: string;
-  receiver_sender: string;
+  receiver: string;
+  accountNumber: string;
   title: string;
-  toAccountNumber: string;
   client: ClientModel;
 }
