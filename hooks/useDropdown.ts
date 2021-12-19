@@ -12,6 +12,7 @@ export const useDropdown = <T extends unknown>(endpoint: string) => {
       const newOptions = dropdownData.map((element) => (
         { label: element as string, value: element as string }
       ));
+      newOptions.unshift(({ label: 'Wszystkie opcje', value: '' }))
       setDropdownOptions(newOptions);
     }
   }, [dropdownData, setDropdownOptions]);

@@ -3,11 +3,8 @@ import {Form, useFormikContext} from "formik";
 import {Button, FormControl, ScrollView, View, VStack} from "native-base";
 import {Input, SubmitButton} from "@native-base/formik-ui";
 import {TransferData} from "../../../interfaces/TransferData";
-import {useNavigation} from "@react-navigation/native";
 import { DatePicker,Select } from 'antd';
 import {useFetchRawData} from "../../../hooks/useFetchRawData";
-import QRCodeScanner from "react-native-qrcode-scanner";
-import {RNCamera} from "react-native-camera";
 
 interface TransferFormProps{
   type:string;
@@ -15,15 +12,14 @@ interface TransferFormProps{
 
 const TransferForm:FC<TransferFormProps> = ({type}) => {
   const {errors, setFieldValue, resetForm} = useFormikContext<TransferData>();
-  const navigation = useNavigation();
-  const [scan,setScan] = useState<boolean>(false);
+  const [,setScan] = useState<boolean>(false);
 
   const {rawData} = useFetchRawData<string[]>("/rest/transfers/categories");
 
   return (
 
     <Form
-      style={{width: "100%", height: "80%"}}
+      style={{width: "100%", height: "80%", marginTop: "60px"}}
     >
       <ScrollView
         w={"full"}
@@ -206,17 +202,6 @@ const TransferForm:FC<TransferFormProps> = ({type}) => {
             }}
           >
             Resetuj
-          </Button>
-          <Button
-            mt={5}
-            rounded='full'
-            colorScheme='secondary'
-            width="1/3"
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            Wstecz
           </Button>
         </View>
       </ScrollView>

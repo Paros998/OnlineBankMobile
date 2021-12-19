@@ -10,13 +10,13 @@ const HistorySearchForm = () => {
   const transferOptions = useDropdown<TransfersCategoriesModel>('/rest/transfers/categories');
 
   return (
-    <Form style={{ width: '100%' }}>
+    <Form style={{ width: '100%', padding: '6%', marginTop: '10px' }}>
       <SelectInput
         name='transferCategory'
         label='Wybierz kategorie płatności'
-        inputWrapperProps={{ top: '24' }}
+        inputWrapperProps={{ top: '10' }}
         options={transferOptions || []}
-        onValueChange={(currentOption) => {
+        onChange={(currentOption) => {
           setFieldValue('transferCategory', currentOption);
           handleSubmit();
         }}

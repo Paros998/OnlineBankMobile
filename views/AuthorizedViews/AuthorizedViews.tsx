@@ -1,6 +1,5 @@
 import React from 'react';
 import Home from "./Home/Home";
-import Payments from "./Payments/Payments";
 import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
@@ -8,7 +7,6 @@ import { BsPerson } from "react-icons/bs";
 import Account from "./Account/Account";
 import PaymentsHome from "./Payments/PaymentsHome";
 import { NavigationContainer } from "@react-navigation/native";
-import History from "./History/History";
 
 const Tab = createBottomTabNavigator();
 
@@ -58,11 +56,6 @@ const AuthorizedViews = () => {
           name='Account'
           component={Account}
           options={accountScreenOptions}
-        />
-
-        <Tab.Screen
-          name='History'
-          component={History}
         />
       </Tab.Navigator>
     </NavigationContainer>
