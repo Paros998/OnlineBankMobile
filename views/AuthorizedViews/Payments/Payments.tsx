@@ -6,7 +6,6 @@ import Logo from "../../../components/Logo/Logo";
 import {useNavigation} from "@react-navigation/native";
 import Transfers from "./Transfers";
 
-
 const Payments = () => {
   const navigation = useNavigation();
 

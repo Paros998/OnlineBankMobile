@@ -32,7 +32,7 @@ const History = () => {
     <View
       width={"full"}
       h='full'
-      backgroundColor='dark.800'
+      backgroundColor='primary_dark.600'
       alignItems='center'
       color='dark.400'
       p={2}
@@ -59,8 +59,8 @@ const History = () => {
 
           <CenteredSpinner
             isPending={isPending}
-            color='white'
-            size='lg'
+            color='dark.800'
+            size='xl'
           />
         </Box>
       </ScrollView>
@@ -69,7 +69,9 @@ const History = () => {
         mt='8'
         mb='8'
         rounded='full'
-        colorScheme='secondary'
+        _pressed={{bgColor: 'light.700'}}
+        bgColor='dark.800'
+        colorScheme='light'
         width="1/3"
         onPress={() => {
           navigation.goBack();

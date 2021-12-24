@@ -18,7 +18,7 @@ const Home: FC = () => {
         flexDirection='row'
       >
         <Box
-          backgroundColor='primary.500'
+          backgroundColor='primary_dark.600'
           width='full'
           height='200'
           position='relative'
@@ -55,7 +55,7 @@ const Home: FC = () => {
           </Text>
 
           <Text color='black' bold fontSize={18}>
-            {currentUser?.balance}
+            {currentUser?.balance} PLN
           </Text>
         </Card>
       </Box>
@@ -66,7 +66,7 @@ const Home: FC = () => {
         <Button
           w='1/2'
           onPress={()=>{
-            navigation.navigate('History' as never);
+            navigation.navigate(`PaymentsHome` ,{screen: "History"});
           }}
         >
           Zobacz więcej w historii

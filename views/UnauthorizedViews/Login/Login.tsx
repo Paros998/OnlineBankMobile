@@ -21,6 +21,7 @@ import {UserCredentials} from "../../../interfaces/UserCredentials";
 import {User} from "../../../interfaces/User";
 import Logo from "../../../components/Logo/Logo";
 import { useCurrentUser } from "../../../contexts/CurrentUserProvider";
+import {Roles} from "../../../enums/Roles";
 
 const formikValues: UserCredentials = {
   username: '',
@@ -49,7 +50,14 @@ const Login: FC = () => {
         const token = response.headers["authorization"];
         const user: User = jwtDecode(token);
         const role = user.authorities[0].authority;
-        
+
+        if(role !== Roles.RoleClient){
+          toast.show({
+            title: "Nie można zalogować się jako pracownik do aplikacji klienta!",
+            status: 'warning'
+          });
+          return;
+        }
 
         toast.show({
           title: "👍 Sukces logowania",

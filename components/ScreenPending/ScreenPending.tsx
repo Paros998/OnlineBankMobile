@@ -12,7 +12,7 @@ const ScreenPending: FC<ScreenPendingProps> = ({ isPending, ...props }) => {
       <CenteredSpinner
         isPending={isPending}
         color='primary.500'
-        size='lg'
+        size='xl'
         {...props}
       />
     </View>
