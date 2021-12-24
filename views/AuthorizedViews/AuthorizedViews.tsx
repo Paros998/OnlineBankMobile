@@ -19,17 +19,17 @@ const navigatorOptions: BottomTabNavigationOptions = {
 };
 
 const homeScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size }) => <AiOutlineHome size={size + 5}/>,
+  tabBarIcon: ({ size,focused }) => <AiOutlineHome size={size + 5}  color={focused ? 'red' : 'black'}/>,
   title: "Strona główna",
 };
 
 const paymentsScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size }) => <FaRegMoneyBillAlt size={size + 5}/>,
+  tabBarIcon: ({ size,focused }) => <FaRegMoneyBillAlt size={size + 5 } color={focused ? 'red' : 'black'}/>,
   title: "Płatności",
 };
 
 const accountScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size }) => <BsPerson size={size + 5}/>,
+  tabBarIcon: ({ size,focused }) => <BsPerson size={size + 5} color={focused ? 'red' : 'black'}/>,
   title: "Konto",
 };
 

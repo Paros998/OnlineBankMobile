@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import { Button, useToast, View } from 'native-base';
 import Logo from "../../../components/Logo/Logo";
 import {useNavigation, useRoute} from "@react-navigation/native";
@@ -13,6 +13,7 @@ import {useCurrentUser} from "../../../contexts/CurrentUserProvider";
 import moment from 'moment';
 import {TransferType} from "../../../enums/TransferType";
 import {CyclicalTransferModel} from "../../../interfaces/CyclicalTransferModel";
+import {useFetchRawData} from "../../../hooks/useFetchRawData";
 
 const validationSchema = Yup.object().shape({
   amount: Yup.number().required("Kwota jest wymagana").positive("Kwota nie może być ujemna"),
@@ -22,7 +23,11 @@ const validationSchema = Yup.object().shape({
   toAccountNumber: Yup.string().required("Number konta odbiorcy jest wymagany").max(23, "Ten numer konta jest niepoprawny").min(23, "Ten numer konta jest niepoprawny"),
 });
 
-const Transfers = () => {
+interface TransfersProps {
+  fetchData: () => {};
+}
+
+const Transfers:FC<TransfersProps> = ({fetchData}) => {
   const route = useRoute();
   const {currentUser} = useCurrentUser();
   const navigation = useNavigation();
@@ -78,7 +83,7 @@ const Transfers = () => {
           client: currentUser
         }
 
-        const response = await axios.post(`/transfers`,body);
+        const response = await axios.post(`/cyclical-transfers`,body);
 
         if (response.status === 200) {
 
@@ -86,6 +91,8 @@ const Transfers = () => {
             title: "👍 Zapisano przelew cykliczny",
             status: 'success',
           });
+
+          fetchData();
 
           navigation.navigate('CyclicalTransfers' as never);
 

@@ -1,9 +1,10 @@
 // TODO Can be defined with native base colors
 
 export const paymentCategoryColors: any = {
-  'Rachunki': 'text-purpel',
-  'Zarobki': 'text-success',
-  'Rozrywka': 'text-warning',
-  'Zdrowie': 'text-info',
-  'Wynagrodzenie': 'text-success',
+  'Wynagrodzenie': 'success.500',
+  'Rachunki': 'purple.700',
+  'Wydatki_Biezace' : 'primary.600',
+  'Rozrywka': 'warning.600',
+  'Zdrowie': 'info.500',
+  'Inne': 'dark.800',
 };

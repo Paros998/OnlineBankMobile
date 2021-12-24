@@ -1,10 +1,12 @@
 import React, {FC, useState} from 'react';
 import {Form, useFormikContext} from "formik";
-import {Button, FormControl, ScrollView, View, VStack} from "native-base";
+import {Button, FormControl, ScrollView, useToast, View, VStack} from "native-base";
 import {Input, SubmitButton} from "@native-base/formik-ui";
 import {TransferData} from "../../../interfaces/TransferData";
-import { DatePicker,Select } from 'antd';
+import {DatePicker,Select } from 'antd';
 import {useFetchRawData} from "../../../hooks/useFetchRawData";
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import {Platform} from "react-native";
 
 interface TransferFormProps{
   type:string;
@@ -12,9 +14,17 @@ interface TransferFormProps{
 
 const TransferForm:FC<TransferFormProps> = ({type}) => {
   const {errors, setFieldValue, resetForm} = useFormikContext<TransferData>();
-  const [,setScan] = useState<boolean>(false);
+  const [hasPermission,setHasPermission] = useState<string | null>(null);
+  const [scanning,setScanning] = useState(false);
+  const toast = useToast();
 
   const {rawData} = useFetchRawData<string[]>("/rest/transfers/categories");
+
+  const handleBarCodeScanned = ({type,data}) => {
+    setScanning(false);
+    setFieldValue("amount",data);
+    console.log(type,data)
+  }
 
   return (
 
@@ -58,27 +68,44 @@ const TransferForm:FC<TransferFormProps> = ({type}) => {
           </FormControl>
 
           <Button
-            onPress={()=>{
-              setScan(true);
+            onPress={async () => {
+              if(!hasPermission){
+                const {status} = await BarCodeScanner.requestPermissionsAsync();
+                if (status === 'granted') {
+                  setHasPermission(status);
+                }else{
+                  toast.show({
+                    title: "Nie uzyskano pozwolenia na skanowanie!",
+                    status: 'info'
+                  });
+                  return;
+                }
+              }
+
+              setScanning(true);
+
             }}
-            colorScheme='dark'
+            rounded="full"
+            colorScheme='light'
+            bgColor='primary_dark.600'
+
+            _disabled={{
+              bgColor: 'secondary.400'
+            }}
+
+            _pressed={{
+              bgColor: 'dark.800'
+            }}
+
+           disabled={Platform.OS === 'web' }
           >
             QR Skan Kwoty
           </Button>
 
-          {/*{*/}
-          {/*  scan &&*/}
-          {/*  <QRCodeScanner*/}
-          {/*      onRead={({rawData})=>{*/}
-          {/*        if(!rawData)*/}
-          {/*          alert("Couldn't read the value properly");*/}
-          {/*        else*/}
-          {/*          setFieldValue("amount",rawData);*/}
-          {/*        setScan(false);*/}
-          {/*      }}*/}
-          {/*  >*/}
-          {/*  </QRCodeScanner>*/}
-          {/*}*/}
+          {Platform.OS !== 'web' && <BarCodeScanner
+              style={BarCodeScanner.Constants.Type.style}
+              onBarCodeScanned={handleBarCodeScanned}
+          />}
 
           {
             type === "cyclical" && (
@@ -114,8 +141,11 @@ const TransferForm:FC<TransferFormProps> = ({type}) => {
               }}
             >
               {
-                rawData && rawData.length > 0 && rawData.map((value) => (
-                      <Select.Option value={value} >
+                rawData && rawData.length > 0 && rawData.map((value,key) => (
+                      <Select.Option
+                        key={key}
+                        value={value}
+                      >
                         {value}
                       </Select.Option>
                   )
@@ -188,7 +218,7 @@ const TransferForm:FC<TransferFormProps> = ({type}) => {
             colorScheme='primary'
             width="1/2"
           >
-            Wykonaj
+            {type === 'normal' ? 'Wykonaj' : "Zapisz"}
           </SubmitButton>
           <Button
             mt={3}
