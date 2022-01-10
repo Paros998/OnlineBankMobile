@@ -1,12 +1,12 @@
 import React from 'react';
-import Home from "./Home/Home";
+import { NavigationContainer } from "@react-navigation/native";
+import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AiOutlineHome } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { BsPerson } from "react-icons/bs";
 import Account from "./Account/Account";
 import PaymentsHome from "./Payments/PaymentsHome";
-import { NavigationContainer } from "@react-navigation/native";
+import Home from "./Home/Home";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,17 +19,35 @@ const navigatorOptions: BottomTabNavigationOptions = {
 };
 
 const homeScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size,focused }) => <AiOutlineHome size={size + 5}  color={focused ? 'red' : 'black'}/>,
+  tabBarIcon: ({ size,focused }) => (
+    <Ionicons
+      name='home-outline'
+      size={size + 5}
+      color={focused ? 'red' : 'black'}
+    />
+  ),
   title: "Strona główna",
 };
 
 const paymentsScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size,focused }) => <FaRegMoneyBillAlt size={size + 5 } color={focused ? 'red' : 'black'}/>,
+  tabBarIcon: ({ size,focused }) => (
+    <FontAwesome5
+      name='money-bill-alt'
+      size={size + 5}
+      color={focused ? 'red' : 'black'}
+    />
+  ),
   title: "Płatności",
 };
 
 const accountScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size,focused }) => <BsPerson size={size + 5} color={focused ? 'red' : 'black'}/>,
+  tabBarIcon: ({ size,focused }) => (
+    <Ionicons
+      name='person-outline'
+      size={size + 5}
+      color={focused ? 'red' : 'black'}
+    />
+  ),
   title: "Konto",
 };
 

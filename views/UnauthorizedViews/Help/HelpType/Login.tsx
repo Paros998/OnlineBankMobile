@@ -21,9 +21,10 @@ const Login:FC<HelpPropsInterface> = ({formikValues,handleSubmit,validationSchem
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <RemindLoginForm/>
+        <RemindLoginForm />
       </Formik>
-      <Divider my={4} w={"3/4"} backgroundColor='light.50'/></>
+      <Divider my={4} w={"3/4"} backgroundColor='light.50'/>
+    </>
   );
 };
 

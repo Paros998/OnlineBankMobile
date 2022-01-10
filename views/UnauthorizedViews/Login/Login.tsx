@@ -96,7 +96,7 @@ const Login: FC = () => {
         Sandbox
       </Button>
 
-      <Logo position="fixed" top="10" />
+      <Logo top="10" />
 
       <Heading
         mt={"1/6"}

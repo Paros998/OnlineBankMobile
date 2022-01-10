@@ -52,7 +52,7 @@ const Help = () => {
       alignItems='center'
       justifyContent='center'
     >
-      <Logo position="fixed" top="10"/>
+      <Logo top="10"/>
 
       {form === '' &&
       <Center
@@ -60,7 +60,7 @@ const Help = () => {
           w='full'
           h='1/4'
           p={3}
-          alignContent='space-evenly'
+          alignContent='space-around'
       >
           <Button
               w='5/6'
@@ -94,7 +94,7 @@ const Help = () => {
           w='full'
           h='1/2'
           p={3}
-          alignContent='space-evenly'
+          alignContent='space-around'
       >
         {form === 'remindLogin'
           ? <Login
@@ -127,7 +127,6 @@ const Help = () => {
         rounded='full'
         onPress={() => navigation.goBack()}
         width={"2/5"}
-        position={"fixed"}
         bottom='16'
         mb={3}
       >

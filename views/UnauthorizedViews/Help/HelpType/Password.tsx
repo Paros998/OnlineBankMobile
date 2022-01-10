@@ -22,7 +22,8 @@ const Password:FC<HelpPropsInterface> = ({formikValues,handleSubmit,validationSc
       >
         <ResetPasswordForm/>
       </Formik>
-      <Divider my={4} w={"3/4"} backgroundColor='light.50'/></>
+      <Divider my={4} w={"3/4"} backgroundColor='light.50'/>
+    </>
   );
 };
 

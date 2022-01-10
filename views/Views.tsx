@@ -3,6 +3,7 @@ import AuthorizedViews from "./AuthorizedViews/AuthorizedViews";
 import { useCurrentUser } from "../contexts/CurrentUserProvider";
 import UnauthorizedViews from "./UnauthorizedViews/UnauthorizedViews";
 import ScreenPending from "../components/ScreenPending/ScreenPending";
+import { Center, Text, View } from 'native-base';
 
 const Views = () => {
   const { currentUser, isPending } = useCurrentUser();
