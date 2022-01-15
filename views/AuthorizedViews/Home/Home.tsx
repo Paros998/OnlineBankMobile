@@ -25,7 +25,7 @@ const Home: FC = () => {
           alignItems='center'
           shadow={5}
         >
-          <Box top='3' right='3'>
+          <Box top='20' left={'40'}>
             <MaterialCommunityIcons
               name='power-standby'
               size={40}

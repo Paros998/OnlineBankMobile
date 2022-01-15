@@ -123,6 +123,7 @@ const Login: FC = () => {
         </Heading>
         <ArrowDownIcon size={'xl'} color='light.50'/>
         <Button
+          justifyContent={"space-evenly"}
           mt={3}
           rounded='full'
           colorScheme='primary'

@@ -120,7 +120,7 @@ const Transfers:FC<TransfersProps> = ({fetchData}) => {
       justifyContent='center'
       p={2}
     >
-      <Logo position="fixed" top="16"/>
+      <Logo position="absolute" top="16"/>
 
       <Formik<TransferData>
         initialValues={TransferDataInitialValues}

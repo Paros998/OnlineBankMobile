@@ -17,7 +17,7 @@ const Payments = () => {
       justifyContent='center'
       p={2}
     >
-      <Logo position="fixed" top="16"/>
+      <Logo position="absolute" top="16"/>
 
       <Center w='5/6'>
         <View
