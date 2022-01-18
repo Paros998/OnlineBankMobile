@@ -88,14 +88,6 @@ const Login: FC = () => {
       alignItems='center'
       justifyContent='center'
     >
-      <Button
-        rounded='full'
-        mt='12'
-        onPress={() => navigation.navigate('Sandbox' as never)}
-      >
-        Sandbox
-      </Button>
-
       <Logo top="10" />
 
       <Heading

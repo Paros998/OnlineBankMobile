@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import { Button, Center, Heading } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 const Sandbox: FC = () => {
   const navigation = useNavigation();
+
   return (
     <Center h='full'>
       <Heading color='pink.500'>Testowanie :)</Heading>

@@ -2,20 +2,18 @@ import React, {FC} from 'react';
 import Logo from "../../../components/Logo/Logo";
 import {Button, ScrollView, View} from "native-base";
 import {useNavigation} from "@react-navigation/native";
-import {useCurrentUser} from "../../../contexts/CurrentUserProvider";
-import {useFetchRawData} from "../../../hooks/useFetchRawData";
 import {CyclicalTransferModel} from "../../../interfaces/CyclicalTransferModel";
 import CenteredSpinner from "../../../components/CenteredSpinner/CenteredSpinner";
 import CyclicalTransferRecords from "../../../records/CyclicalTransferRecords/CyclicalTransferRecords";
+import { useCurrentUser } from '../../../contexts/CurrentUserProvider';
+import { useFetchRawData } from '../../../hooks/useFetchRawData';
 
-interface CyclicalTransfersProps {
-  rawData: CyclicalTransferModel[];
-  isPending: boolean;
-  fetchData: () => {};
-}
-
-const CyclicalTransfers:FC<CyclicalTransfersProps> = ({fetchData,rawData,isPending}) => {
+const CyclicalTransfers: FC = () => {
   const navigation = useNavigation();
+  const { currentUser } = useCurrentUser();
+  const { rawData, isPending, fetchData } = useFetchRawData<CyclicalTransferModel[]>(
+    `/cyclical-transfers/client/${currentUser?.clientId}`,
+  );
 
   return (
     <View
@@ -36,17 +34,16 @@ const CyclicalTransfers:FC<CyclicalTransfersProps> = ({fetchData,rawData,isPendi
           alignItems: "center"
         }}
       >
-
         <CenteredSpinner
           isPending={isPending}
           color='dark.800'
-          size='xl'
+          size='lg'
         />
+
         <CyclicalTransferRecords
           cyclicalTransfers={rawData || []}
           updateTransfers={fetchData}
         />
-
       </ScrollView>
 
       <Button

@@ -1,9 +1,8 @@
 import React from 'react';
+import {useNavigation} from "@react-navigation/native";
 import {Center, Text, IconButton, View, HStack, Pressable} from "native-base";
 import {MaterialCommunityIcons} from "@expo/vector-icons"
-
 import Logo from "../../../components/Logo/Logo";
-import {useNavigation} from "@react-navigation/native";
 import Transfers from "./Transfers";
 
 const Payments = () => {
