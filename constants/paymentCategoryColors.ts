@@ -1,5 +1,3 @@
-// TODO Can be defined with native base colors
-
 export const paymentCategoryColors: any = {
   'Wynagrodzenie': 'success.500',
   'Rachunki': 'purple.700',

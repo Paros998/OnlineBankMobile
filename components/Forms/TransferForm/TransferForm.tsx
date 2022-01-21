@@ -1,242 +1,196 @@
-import React, {FC, useState} from 'react';
-import {Form, useFormikContext} from "formik";
-import {Button, FormControl, ScrollView, useToast, View, VStack} from "native-base";
-import {Input, SubmitButton} from "@native-base/formik-ui";
-import {TransferData} from "../../../interfaces/TransferData";
-import {DatePicker,Select } from 'antd';
-import {useFetchRawData} from "../../../hooks/useFetchRawData";
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import {Platform} from "react-native";
+import React, { FC, useState } from 'react';
+import { Input, SubmitButton } from '@native-base/formik-ui';
+import { Button, FormControl, HStack, ScrollView, Select, VStack } from 'native-base';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { TextInput } from 'react-native';
+import { useFormikContext } from 'formik';
+import moment from 'moment';
+import { TransferData } from '../../../interfaces/TransferData';
+import { useFetchRawData } from '../../../hooks/useFetchRawData';
+import { PaymentsRoutes } from '../../../enums/PaymentsRoutes';
 
-interface TransferFormProps{
-  type:string;
+interface TransferFormProps {
+  transferRouteName: string;
+  initialValue: number;
 }
 
-const TransferForm:FC<TransferFormProps> = ({type}) => {
-  const {errors, setFieldValue, resetForm} = useFormikContext<TransferData>();
-  const [hasPermission,setHasPermission] = useState<string | null>(null);
-  const [scanning,setScanning] = useState(false);
-  const toast = useToast();
+const reactNativeInputStyle = {
+  color: 'white',
+  padding: 10,
+  borderColor: 'gray',
+  width: '100%',
+  borderWidth: 1,
+  borderRadius: 5,
+  fontSize: 19,
+};
 
-  const {rawData} = useFetchRawData<string[]>("/rest/transfers/categories");
-
-  const handleBarCodeScanned = ({type,data}) => {
-    setScanning(false);
-    setFieldValue("amount",data);
-    console.log(type,data)
-  }
+const TransferForm: FC<TransferFormProps> = ({ transferRouteName, initialValue }) => {
+  const { errors, setFieldValue, resetForm, values } = useFormikContext<TransferData>();
+  const [shouldShowDatePicker, setShouldShowDatePicker] = useState(false);
+  const { rawData } = useFetchRawData<string[]>('/rest/transfers/categories');
 
   return (
-
-    <Form
-      style={{width: "100%", height: "80%", marginTop: "60px"}}
+    <ScrollView
+      w={'full'}
+      mt="32"
+      p={0}
+      contentContainerStyle={{
+        alignItems: 'center',
+      }}
     >
-      <ScrollView
-        w={"full"}
-        height={"full"}
-        mb={"16"}
-        contentContainerStyle={{
-          alignItems: "center"
-        }}
+      <VStack
+        w="100%"
+        h="100%"
+        p={2}
+        justifyContent="center"
+        space={8}
       >
-        <VStack
-          mt={3}
-          backgroundColor='primary.500'
-          w={"5/6"}
-          h={"container"}
-          rounded={"xl"}
-          p={2}
-          pt={5}
-          pb={5}
-          justifyContent={"center"}
-          space={4}
-        >
-          <FormControl isRequired isInvalid={errors.amount as never}>
-            <FormControl.Label _text={{fontSize: "xl"}}>
-              Kwota
-            </FormControl.Label>
-            <Input
-              name='amount'
-              color='dark.800'
-              backgroundColor='light.50'
-              size="xl"
-              placeholder={'450,78 ...'}
-            />
-            <FormControl.ErrorMessage>
-              {errors.amount}
-            </FormControl.ErrorMessage>
-          </FormControl>
+        <FormControl isRequired isInvalid={errors.amount as never}>
+          <FormControl.Label _text={{ fontSize: 'xl' }}>
+            Kwota
+          </FormControl.Label>
 
-          <Button
-            onPress={async () => {
-              if(!hasPermission){
-                const {status} = await BarCodeScanner.requestPermissionsAsync();
-                if (status === 'granted') {
-                  setHasPermission(status);
-                }else{
-                  toast.show({
-                    title: "Nie uzyskano pozwolenia na skanowanie!",
-                    status: 'info'
-                  });
-                  return;
-                }
-              }
+          <TextInput
+            keyboardType="numeric"
+            onChangeText={(value) => setFieldValue('amount', value)}
+            defaultValue={String(initialValue)}
+            style={reactNativeInputStyle}
+            placeholderTextColor="gray"
+            placeholder={'450,78 ...'}
+          />
 
-              setScanning(true);
+          <FormControl.ErrorMessage>
+            {errors.amount}
+          </FormControl.ErrorMessage>
+        </FormControl>
 
-            }}
-            rounded="full"
-            colorScheme='light'
-            bgColor='primary_dark.600'
+        {
+          transferRouteName === PaymentsRoutes.NewCyclicalTransfer && (
+            <FormControl isRequired isInvalid={errors.transferDate as never}>
+              <FormControl.Label _text={{ fontSize: 'xl' }}>
+                Data realizacji cyklicznej
+              </FormControl.Label>
 
-            _disabled={{
-              bgColor: 'secondary.400'
-            }}
+              <Button onPress={() => setShouldShowDatePicker(true)}>
+                {values.transferDate || 'Wybierz datę przelewu cyklicznego'}
+              </Button>
 
-            _pressed={{
-              bgColor: 'dark.800'
-            }}
-
-           disabled={Platform.OS === 'web' }
-          >
-            QR Skan Kwoty
-          </Button>
-
-          {Platform.OS !== 'web' && <BarCodeScanner
-              style={BarCodeScanner.Constants.Type.style}
-              onBarCodeScanned={handleBarCodeScanned}
-          />}
-
-          {
-            type === "cyclical" && (
-              <FormControl isRequired isInvalid={errors.transferDate as never}>
-                <FormControl.Label _text={{fontSize: "xl"}}>
-                  Data realizacji cyklicznej
-                </FormControl.Label>
-                <DatePicker
-                  format={"YYYY-MM-DD"}
-                  onChange={(date) => {
-                    setFieldValue("transferDate",date);
-                  }}
-                />
-                <FormControl.ErrorMessage>
-                  {errors.transferDate}
-                </FormControl.ErrorMessage>
-              </FormControl>
-            )
-          }
-
-          <FormControl isRequired isInvalid={errors.category as never}>
-            <FormControl.Label _text={{fontSize: "xl"}}>
-              Kategoria
-            </FormControl.Label>
-
-            <Select
-              style={{
-                backgroundColor: 'light.50'
-              }}
-              placeholder='Kategoria'
-              onChange={(itemValue) => {
-                setFieldValue("category", itemValue);
-              }}
-            >
               {
-                rawData && rawData.length > 0 && rawData.map((value,key) => (
-                      <Select.Option
-                        key={key}
-                        value={value}
-                      >
-                        {value}
-                      </Select.Option>
-                  )
+                shouldShowDatePicker && (
+                  <DateTimePicker
+                    value={moment(values.transferDate).toDate()}
+                    display="default"
+                    onChange={(event: any, date: Date | undefined) => {
+                      setShouldShowDatePicker(false);
+                      setFieldValue('transferDate', moment(date).format('YYYY-MM-DD'));
+                    }}
+                  />
                 )
               }
-            </Select>
 
-            <FormControl.ErrorMessage>
-              {errors.category}
-            </FormControl.ErrorMessage>
-          </FormControl>
+              <FormControl.ErrorMessage>
+                {errors.transferDate}
+              </FormControl.ErrorMessage>
+            </FormControl>
+          )
+        }
 
-          <FormControl isRequired isInvalid={errors.receiver_sender as never}>
-            <FormControl.Label _text={{fontSize: "xl"}}>
-              Odbiorca
-            </FormControl.Label>
-            <Input
-              name='receiver_sender'
-              color='dark.800'
-              backgroundColor='light.50'
-              size="xl"
-              placeholder={'Jan Kowalski ...'}
-            />
-            <FormControl.ErrorMessage>
-              {errors.receiver_sender}
-            </FormControl.ErrorMessage>
-          </FormControl>
+        <FormControl isRequired isInvalid={errors.category as never}>
+          <FormControl.Label _text={{ fontSize: 'xl' }}>
+            Kategoria
+          </FormControl.Label>
 
-          <FormControl isRequired isInvalid={errors.title as never}>
-            <FormControl.Label _text={{fontSize: "xl"}}>
-              Tytuł
-            </FormControl.Label>
-            <Input
-              name='title'
-              color='dark.800'
-              backgroundColor='light.50'
-              size="xl"
-              placeholder={'Opłata prąd, lipiec ...'}
-            />
-            <FormControl.ErrorMessage>
-              {errors.title}
-            </FormControl.ErrorMessage>
-          </FormControl>
-
-          <FormControl isRequired isInvalid={errors.toAccountNumber as never}>
-            <FormControl.Label _text={{fontSize: "xl"}}>
-              Rachunek odbiorcy
-            </FormControl.Label>
-            <Input
-              name='toAccountNumber'
-              color='dark.800'
-              backgroundColor='light.50'
-              size="xl"
-              placeholder={'001501235121233231...'}
-            />
-            <FormControl.ErrorMessage>
-              {errors.toAccountNumber}
-            </FormControl.ErrorMessage>
-          </FormControl>
-
-
-        </VStack>
-        <View
-          w={"full"}
-          alignItems={'center'}
-        >
-          <SubmitButton
-            mt={5}
-            rounded='full'
-            colorScheme='primary'
-            width="1/2"
+          <Select
+            placeholder="Kategoria"
+            fontSize={19}
+            onValueChange={(itemValue) => {
+              setFieldValue('category', itemValue);
+            }}
           >
-            {type === 'normal' ? 'Wykonaj' : "Zapisz"}
+            {
+              rawData?.map((value, key) => (
+                  <Select.Item
+                    key={key}
+                    label={value}
+                    value={value}
+                  >
+                    {value}
+                  </Select.Item>
+                ),
+              ) ?? []
+            }
+          </Select>
+
+          <FormControl.ErrorMessage>
+            {errors.category}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={errors.receiver_sender as never}>
+          <FormControl.Label _text={{ fontSize: 'xl' }}>
+            Odbiorca
+          </FormControl.Label>
+          <Input
+            name="receiver_sender"
+            size="xl"
+            placeholder={'Jan Kowalski ...'}
+          />
+          <FormControl.ErrorMessage>
+            {errors.receiver_sender}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={errors.title as never}>
+          <FormControl.Label _text={{ fontSize: 'xl' }}>
+            Tytuł
+          </FormControl.Label>
+          <Input
+            name="title"
+            size="xl"
+            placeholder={'Opłata prąd, lipiec ...'}
+          />
+          <FormControl.ErrorMessage>
+            {errors.title}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={errors.toAccountNumber as never}>
+          <FormControl.Label _text={{ fontSize: 'xl' }}>
+            Rachunek odbiorcy
+          </FormControl.Label>
+          <Input
+            name="toAccountNumber"
+            size="xl"
+            placeholder={'001501235121233231...'}
+          />
+          <FormControl.ErrorMessage>
+            {errors.toAccountNumber}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <HStack space={4}>
+          <SubmitButton
+            rounded="full"
+            colorScheme="primary"
+            width="48%"
+          >
+            {transferRouteName === PaymentsRoutes.NewTransfer ? 'Wykonaj' : 'Zapisz'}
           </SubmitButton>
           <Button
-            mt={3}
-            mb={5}
-            rounded='full'
-            colorScheme='light'
+            rounded="full"
+            colorScheme="light"
             variant={'subtle'}
-            width="1/2"
+            width="48%"
             onPress={() => {
               resetForm();
             }}
           >
             Resetuj
           </Button>
-        </View>
-      </ScrollView>
-    </Form>
-  )
+        </HStack>
+      </VStack>
+    </ScrollView>
+  );
 };
 
 export default TransferForm;

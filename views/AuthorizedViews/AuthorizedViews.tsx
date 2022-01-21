@@ -1,59 +1,81 @@
 import React from 'react';
-import Home from "./Home/Home";
-import { BottomTabNavigationOptions, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AiOutlineHome } from "react-icons/ai";
-import { FaRegMoneyBillAlt } from "react-icons/fa";
-import { BsPerson } from "react-icons/bs";
-import Account from "./Account/Account";
-import PaymentsHome from "./Payments/PaymentsHome";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer } from '@react-navigation/native';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Account from './Account/Account';
+import PaymentsHome from './Payments/PaymentsHome';
+import Home from './Home/Home';
 
 const Tab = createBottomTabNavigator();
 
 const navigatorOptions: BottomTabNavigationOptions = {
   headerShown: false,
-  tabBarLabelStyle: { fontSize: 14, fontWeight: 'bold' },
+  tabBarLabelStyle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   tabBarLabelPosition: 'below-icon',
   tabBarActiveTintColor: 'red',
-  tabBarInactiveTintColor: 'black'
+  tabBarInactiveTintColor: 'black',
 };
 
 const homeScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size,focused }) => <AiOutlineHome size={size + 5}  color={focused ? 'red' : 'black'}/>,
-  title: "Strona główna",
+  tabBarIcon: ({ size, focused }) => (
+    <Ionicons
+      name="home-outline"
+      size={size + 5}
+      color={focused ? 'red' : 'black'}
+    />
+  ),
+  title: 'Strona główna',
+  unmountOnBlur: true,
 };
 
 const paymentsScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size,focused }) => <FaRegMoneyBillAlt size={size + 5 } color={focused ? 'red' : 'black'}/>,
-  title: "Płatności",
+  tabBarIcon: ({ size, focused}) => (
+    <FontAwesome5
+      name="money-bill-alt"
+      size={size + 5}
+      color={focused ? 'red' : 'black'}
+    />
+  ),
+  title: 'Płatności',
+  unmountOnBlur: true,
 };
 
 const accountScreenOptions: BottomTabNavigationOptions = {
-  tabBarIcon: ({ size,focused }) => <BsPerson size={size + 5} color={focused ? 'red' : 'black'}/>,
-  title: "Konto",
+  tabBarIcon: ({ size, focused }) => (
+    <Ionicons
+      name="person-outline"
+      size={size + 5}
+      color={focused ? 'red' : 'black'}
+    />
+  ),
+  title: 'Konto',
 };
 
 const AuthorizedViews = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName='Home'
+        initialRouteName="Home"
         screenOptions={navigatorOptions}
+        detachInactiveScreens
       >
         <Tab.Screen
-          name='Home'
+          name="Home"
           component={Home}
           options={homeScreenOptions}
         />
 
-      <Tab.Screen
-        name='PaymentsHome'
-        component={PaymentsHome}
-        options={paymentsScreenOptions}
-      />
+        <Tab.Screen
+          name="PaymentsHome"
+          component={PaymentsHome}
+          options={paymentsScreenOptions}
+        />
 
         <Tab.Screen
-          name='Account'
+          name="Account"
           component={Account}
           options={accountScreenOptions}
         />

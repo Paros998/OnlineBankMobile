@@ -88,15 +88,7 @@ const Login: FC = () => {
       alignItems='center'
       justifyContent='center'
     >
-      <Button
-        rounded='full'
-        mt='12'
-        onPress={() => navigation.navigate('Sandbox' as never)}
-      >
-        Sandbox
-      </Button>
-
-      <Logo position="fixed" top="10" />
+      <Logo top="10" />
 
       <Heading
         mt={"1/6"}
@@ -123,6 +115,7 @@ const Login: FC = () => {
         </Heading>
         <ArrowDownIcon size={'xl'} color='light.50'/>
         <Button
+          justifyContent={"space-evenly"}
           mt={3}
           rounded='full'
           colorScheme='primary'

@@ -1,14 +1,12 @@
 import React from 'react';
-import {Center, Text, IconButton, View, HStack, Pressable} from "native-base";
-import {MaterialCommunityIcons} from "@expo/vector-icons"
-
-import Logo from "../../../components/Logo/Logo";
-import {useNavigation} from "@react-navigation/native";
-import Transfers from "./Transfers";
+import { useNavigation } from '@react-navigation/native';
+import { Center, HStack, IconButton, Pressable, Text, View } from 'native-base';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Logo from '../../../components/Logo/Logo';
+import { PaymentsRoutes } from '../../../enums/PaymentsRoutes';
 
 const Payments = () => {
   const navigation = useNavigation();
-
   return (
     <View
       height={"full"}
@@ -17,7 +15,7 @@ const Payments = () => {
       justifyContent='center'
       p={2}
     >
-      <Logo position="fixed" top="16"/>
+      <Logo position="absolute" top="16"/>
 
       <Center w='5/6'>
         <View
@@ -26,11 +24,7 @@ const Payments = () => {
           m={2}
           w='full'
         >
-          <Pressable
-            onPress={() => navigation.navigate('Transfers' as never, {
-              type: 'normal'
-            } as never)}
-          >
+          <Pressable onPress={() => navigation.navigate(PaymentsRoutes.NewTransfer as never)}>
             <HStack alignItems="center">
               <IconButton
                 icon={<MaterialCommunityIcons name="bank-transfer-out" size={72}/>}
@@ -52,11 +46,7 @@ const Payments = () => {
           m={2}
           w='full'
         >
-          <Pressable
-            onPress={() => navigation.navigate('Transfers' as never, {
-              type: 'cyclical'
-            } as never)}
-          >
+          <Pressable onPress={() => navigation.navigate(PaymentsRoutes.NewCyclicalTransfer as never)}>
             <HStack alignItems="center">
               <IconButton
                 icon={<MaterialCommunityIcons name="transfer" size={72}/>}
@@ -77,11 +67,7 @@ const Payments = () => {
           m={2}
           w='full'
         >
-          <Pressable
-            onPress={() => navigation.navigate('CyclicalTransfers' as never, {
-              type: 'cyclical'
-            } as never)}
-          >
+          <Pressable onPress={() => navigation.navigate(PaymentsRoutes.CyclicalTransfers as never)}>
             <HStack alignItems="center">
               <IconButton
                 icon={<MaterialCommunityIcons name="server" size={72}/>}
@@ -102,11 +88,7 @@ const Payments = () => {
           m={2}
           w='full'
         >
-          <Pressable
-            onPress={() => navigation.navigate('History' as never, {
-              type: 'cyclical'
-            } as never)}
-          >
+          <Pressable onPress={() => navigation.navigate(PaymentsRoutes.History as never)}>
             <HStack alignItems="center">
               <IconButton
                 icon={<MaterialCommunityIcons name="history" size={72}/>}

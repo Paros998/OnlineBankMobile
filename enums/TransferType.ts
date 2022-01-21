@@ -1,4 +1,4 @@
 export enum TransferType {
-  Incoming = 'Przychody',
-  Outgoing = 'Wydatki'
+  Incoming = 'INCOMING',
+  Outgoing = 'OUTGOING'
 }

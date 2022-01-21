@@ -20,12 +20,12 @@ const Home: FC = () => {
         <Box
           backgroundColor='primary_dark.600'
           width='full'
-          height='200'
+          height='230'
           position='relative'
           alignItems='center'
           shadow={5}
         >
-          <Box position='fixed' top='3' right='3'>
+          <Box top='20' left={'40'}>
             <MaterialCommunityIcons
               name='power-standby'
               size={40}
@@ -36,7 +36,7 @@ const Home: FC = () => {
             />
           </Box>
 
-          <Logo position="fixed" top="10"/>
+          <Logo top="10"/>
         </Box>
 
         <Card
@@ -66,7 +66,7 @@ const Home: FC = () => {
         <Button
           w='1/2'
           onPress={()=>{
-            navigation.navigate(`PaymentsHome` ,{screen: "History"});
+            navigation.navigate('PaymentsHome' ,{screen: "History"});
           }}
         >
           Zobacz więcej w historii
@@ -75,5 +75,5 @@ const Home: FC = () => {
     </View>
   );
 };
-//TODO fix navigation
+
 export default Home;

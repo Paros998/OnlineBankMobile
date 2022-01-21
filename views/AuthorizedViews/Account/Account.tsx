@@ -65,136 +65,132 @@ const Account = () => {
               </Text>
             </Text>
 
-              <VStack
-                space={'4'}>
-                <VStack>
-                  <Text
-                    fontWeight={"bold"}
-                    textDecorationLine={"underline"}
-                  >
-                    Imię i Nazwisko:
-                  </Text>
-                  <Text
-                    ml={2}
-                  >
-                    {fullName}
-                  </Text>
-                </VStack>
-
-                <VStack>
-                  <Text
-                    fontWeight={"bold"}
-                    textDecorationLine={"underline"}
-                  >
-                    Pesel:
-                  </Text>
-                  <Text
-                    ml={2}
-                  >
-                    {personalNumber}
-                  </Text>
-                </VStack>
-
-                <VStack>
-                  <Text
-                    fontWeight={"bold"}
-                    textDecorationLine={"underline"}
-                  >
-                    Numer Dowodu:
-                  </Text>
-                  <Text
-                    ml={2}
-                  >
-                    {identificationNumber}
-                  </Text>
-                </VStack>
-
-                <Divider
-                  bgColor={'dark.800'}
-                />
-
-                <VStack>
-                  <Text
-                    fontWeight={"bold"}
-                    textDecorationLine={"underline"}
-                  >
-                    Data Urodzenia:
-                  </Text>
-                  <Text
-                    ml={2}
-                  >
-                    <Moment
-                      format={'YYYY-MM-DD'}
-                    >
-                      {dateOfBirth}
-                    </Moment>
-                  </Text>
-                </VStack>
-
-                <VStack>
-                  <Text
-                    fontWeight={"bold"}
-                    textDecorationLine={"underline"}
-                  >
-                    Data Utworzenia:
-                  </Text>
-                  <Text
-                    ml={2}
-                  >
-                    {dateOfCreation}
-                  </Text>
-                </VStack>
-
-                <Divider
-                  bgColor={'dark.800'}
-                />
-
-                <VStack>
-                  <Text
-                    fontWeight={"bold"}
-                    textDecorationLine={"underline"}
-                  >
-                    Adres Email:
-                  </Text>
-                  <Text
-                    ml={2}
-                  >
-                    {email}
-                  </Text>
-                </VStack>
-
-                <VStack>
-                  <Text
-                    fontWeight={"bold"}
-                    textDecorationLine={"underline"}
-                  >
-                    Adres:
-                  </Text>
-                  <Text
-                    ml={2}
-                  >
-                    {city + ' ,  ' + postalCode + '\n' + homeAddress}
-                  </Text>
-                </VStack>
-
-                <Divider
-                  bgColor={'dark.800'}
-                />
-
-                <VStack>
-                  <Text
-                    fontWeight={"bold"}
-                    textDecorationLine={"underline"}
-                  >
-                    Adres Korespondencyjny:
-                  </Text>
-                  <Text
-                    ml={2}
-                  >
-                    {secCity + ' ,  ' + secPostalCode + '\n' + secHomeAddress}
-                  </Text>
-                </VStack>
+            <VStack
+              space={'4'}>
+              <VStack>
+                <Text
+                  fontWeight={"bold"}
+                  textDecorationLine={"underline"}
+                >
+                  Imię i Nazwisko:
+                </Text>
+                <Text
+                  ml={2}
+                >
+                  {fullName}
+                </Text>
               </VStack>
+
+              <VStack>
+                <Text
+                  fontWeight={"bold"}
+                  textDecorationLine={"underline"}
+                >
+                  Pesel:
+                </Text>
+                <Text
+                  ml={2}
+                >
+                  {personalNumber}
+                </Text>
+              </VStack>
+
+              <VStack>
+                <Text
+                  fontWeight={"bold"}
+                  textDecorationLine={"underline"}
+                >
+                  Numer Dowodu:
+                </Text>
+                <Text
+                  ml={2}
+                >
+                  {identificationNumber}
+                </Text>
+              </VStack>
+
+              <Divider
+                bgColor={'dark.800'}
+              />
+
+              <VStack>
+                <Text
+                  fontWeight={"bold"}
+                  textDecorationLine={"underline"}
+                >
+                  Data Urodzenia:
+                </Text>
+                <Text
+                  ml={2}
+                >
+                  {dateOfBirth}
+                </Text>
+              </VStack>
+
+              <VStack>
+                <Text
+                  fontWeight={"bold"}
+                  textDecorationLine={"underline"}
+                >
+                  Data Utworzenia:
+                </Text>
+                <Text
+                  ml={2}
+                >
+                  {dateOfCreation}
+                </Text>
+              </VStack>
+
+              <Divider
+                bgColor={'dark.800'}
+              />
+
+              <VStack>
+                <Text
+                  fontWeight={"bold"}
+                  textDecorationLine={"underline"}
+                >
+                  Adres Email:
+                </Text>
+                <Text
+                  ml={2}
+                >
+                  {email}
+                </Text>
+              </VStack>
+
+              <VStack>
+                <Text
+                  fontWeight={"bold"}
+                  textDecorationLine={"underline"}
+                >
+                  Adres:
+                </Text>
+                <Text
+                  ml={2}
+                >
+                  {city + ' ,  ' + postalCode + '\n' + homeAddress}
+                </Text>
+              </VStack>
+
+              <Divider
+                bgColor={'dark.800'}
+              />
+
+              <VStack>
+                <Text
+                  fontWeight={"bold"}
+                  textDecorationLine={"underline"}
+                >
+                  Adres Korespondencyjny:
+                </Text>
+                <Text
+                  ml={2}
+                >
+                  {secCity + ' ,  ' + secPostalCode + '\n' + secHomeAddress}
+                </Text>
+              </VStack>
+            </VStack>
           </ScrollView>
         </View>
       </View>

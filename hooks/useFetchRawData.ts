@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import { useCallback, useEffect, useState } from 'react';
+import axios from 'axios';
 
 export const useFetchRawData = <T extends unknown>(endpoint: string, params?: any) => {
   const [rawData, setRawData] = useState<T>();
@@ -19,7 +19,7 @@ export const useFetchRawData = <T extends unknown>(endpoint: string, params?: an
 
   useEffect(() => {
     fetchData().catch();
-  }, [fetchData, params]);
+  }, [fetchData]);
 
   return { rawData, fetchData, isPending };
 };

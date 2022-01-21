@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
-import { FormControl, IFormControlProps } from "native-base";
+import { FormControl, IFormControlProps, ISelectProps, Select } from 'native-base';
 import { useField } from "formik";
 import { SelectOption } from '../../../interfaces/SelectOption';
-import { Select, SelectProps } from "antd";
 
-interface SelectInputProps extends SelectProps<string> {
+interface SelectInputProps extends ISelectProps {
   name: string;
   label: string;
   inputWrapperProps?: IFormControlProps;
@@ -16,16 +15,14 @@ const SelectInput: FC<SelectInputProps> = ({ name, label, inputWrapperProps, opt
   return (
     <FormControl {...inputWrapperProps}>
       <FormControl.Label>{label}</FormControl.Label>
-      <Select
-        {...field}
-        {...props}
-        value={field.value}
-      >
+      <Select {...field} {...props}>
         {
           options.map((option) => (
-            <Select.Option key={option.value} value={option.value} >
-              {option.label}
-            </Select.Option>
+            <Select.Item
+              label={option.label}
+              key={option.value}
+              value={option.value}
+            />
           ))
         }
       </Select>

@@ -46,10 +46,10 @@ const useFetchCurrentUser = () => {
   }, [setCurrentUser, fetchUser]);
 
   const handleLogout = async () => {
+    setCurrentUser(undefined);
     await deleteToken();
     await fetchUser();
     delete axios.defaults.headers.common["Authorization"];
-    setCurrentUser(undefined);
     toast.show({
       title: 'Dziękujemy za skorzystanie z naszych usług',
       status: 'info',
