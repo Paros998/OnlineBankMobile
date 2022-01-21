@@ -28,6 +28,7 @@ const homeScreenOptions: BottomTabNavigationOptions = {
     />
   ),
   title: 'Strona główna',
+  unmountOnBlur: true,
 };
 
 const paymentsScreenOptions: BottomTabNavigationOptions = {
@@ -39,6 +40,7 @@ const paymentsScreenOptions: BottomTabNavigationOptions = {
     />
   ),
   title: 'Płatności',
+  unmountOnBlur: true,
 };
 
 const accountScreenOptions: BottomTabNavigationOptions = {
@@ -58,6 +60,7 @@ const AuthorizedViews = () => {
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={navigatorOptions}
+        detachInactiveScreens
       >
         <Tab.Screen
           name="Home"

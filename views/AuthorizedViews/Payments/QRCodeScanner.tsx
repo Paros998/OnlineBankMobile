@@ -1,25 +1,26 @@
-import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, useToast, View } from 'native-base';
+import { Button, Text, useToast, View, VStack } from 'native-base';
 import { BarCodeEvent, BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
+import { PaymentsRoutes } from '../../../enums/PaymentsRoutes';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { FormRouteParams } from '../../../interfaces/FormRouteParams';
 
-interface QrCodeScannerProps {
-  setInitialAmount: Dispatch<SetStateAction<number>>;
-}
-
-const QrCodeScanner: FC<QrCodeScannerProps> = ({ setInitialAmount }) => {
-  const navigation = useNavigation();
+const QrCodeScanner: FC = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<FormRouteParams>>();
   const toast = useToast();
-  const [ scanData, setScanData ] = useState(false);
+  const [shouldScanAgain, setShouldScanAgain] = useState(false);
+  const [scannedData, setScannedData] = useState(0);
 
   const handleBarCodeScanned = ({ data }: BarCodeEvent) => {
-    setScanData(true);
+    setShouldScanAgain(true);
+    const parsedData = Number.parseFloat(data);
 
-    if (!isNaN(Number.parseFloat(data))) {
-      setInitialAmount(Number.parseFloat(data));
+    if (!isNaN(parsedData) && parsedData > 0) {
+      setScannedData(parsedData);
       toast.show({
-        title: `Zeskanowano wartość: ${Number.parseFloat(data)}`,
+        title: `Zeskanowano wartość: ${parsedData}`,
         status: 'success'
       });
     } else {
@@ -31,32 +32,53 @@ const QrCodeScanner: FC<QrCodeScannerProps> = ({ setInitialAmount }) => {
   };
 
   return (
-    <View w='full' h='3/4'>
+    <View w='full' h='full'>
       <BarCodeScanner
-        onBarCodeScanned={scanData ? undefined : handleBarCodeScanned}
+        onBarCodeScanned={shouldScanAgain ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
 
-      {
-        scanData && (
-          <Button
-            mt='5'
-            rounded='full'
-            onPress={() => setScanData(false)}
-          >
-            Zeskanuj ponownie
-          </Button>
-        )
-      }
+      <VStack justifyContent='flex-end' alignItems='center' w='full' h='full' pb='5'>
+        {
+          scannedData > 0 && (
+            <Button
+              mt='5'
+              colorScheme='success'
+              rounded='full'
+              w='1/2'
+              onPress={() => navigation.replace(
+                PaymentsRoutes.Form,
+                { initialAmount: scannedData }
+              )}
+            >
+              <Text>Przejdź do formularzu</Text>
+            </Button>
+          )
+        }
 
-      <Button
-        mt='4'
-        colorScheme='secondary'
-        rounded='full'
-        onPress={navigation.goBack}
-      >
-        Wróć do formularzu
-      </Button>
+        {
+          shouldScanAgain && (
+            <Button
+              mt='5'
+              rounded='full'
+              w='1/2'
+              onPress={() => setShouldScanAgain(false)}
+            >
+              <Text>Zeskanuj ponownie</Text>
+            </Button>
+          )
+        }
+
+        <Button
+          mt='5'
+          colorScheme='secondary'
+          rounded='full'
+          w='1/2'
+          onPress={navigation.goBack}
+        >
+          <Text>Wróć</Text>
+        </Button>
+      </VStack>
     </View>
   );
 };

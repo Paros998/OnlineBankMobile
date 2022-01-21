@@ -1,15 +1,17 @@
 import React, { FC, useState } from 'react';
-import { useFormikContext } from 'formik';
-import { TextInput } from 'react-native';
+import { Input, SubmitButton } from '@native-base/formik-ui';
 import { Button, FormControl, HStack, ScrollView, Select, VStack } from 'native-base';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Input, SubmitButton } from '@native-base/formik-ui';
+import { TextInput } from 'react-native';
+import { useFormikContext } from 'formik';
+import moment from 'moment';
 import { TransferData } from '../../../interfaces/TransferData';
 import { useFetchRawData } from '../../../hooks/useFetchRawData';
-import moment from 'moment';
+import { PaymentsRoutes } from '../../../enums/PaymentsRoutes';
 
 interface TransferFormProps {
-  type: string;
+  transferRouteName: string;
+  initialValue: number;
 }
 
 const reactNativeInputStyle = {
@@ -22,7 +24,7 @@ const reactNativeInputStyle = {
   fontSize: 19,
 };
 
-const TransferForm: FC<TransferFormProps> = ({ type }) => {
+const TransferForm: FC<TransferFormProps> = ({ transferRouteName, initialValue }) => {
   const { errors, setFieldValue, resetForm, values } = useFormikContext<TransferData>();
   const [shouldShowDatePicker, setShouldShowDatePicker] = useState(false);
   const { rawData } = useFetchRawData<string[]>('/rest/transfers/categories');
@@ -51,6 +53,7 @@ const TransferForm: FC<TransferFormProps> = ({ type }) => {
           <TextInput
             keyboardType="numeric"
             onChangeText={(value) => setFieldValue('amount', value)}
+            defaultValue={String(initialValue)}
             style={reactNativeInputStyle}
             placeholderTextColor="gray"
             placeholder={'450,78 ...'}
@@ -62,7 +65,7 @@ const TransferForm: FC<TransferFormProps> = ({ type }) => {
         </FormControl>
 
         {
-          type === 'cyclical' && (
+          transferRouteName === PaymentsRoutes.NewCyclicalTransfer && (
             <FormControl isRequired isInvalid={errors.transferDate as never}>
               <FormControl.Label _text={{ fontSize: 'xl' }}>
                 Data realizacji cyklicznej
@@ -75,13 +78,11 @@ const TransferForm: FC<TransferFormProps> = ({ type }) => {
               {
                 shouldShowDatePicker && (
                   <DateTimePicker
-                    value={moment(values.transferDate)
-                      .toDate()}
+                    value={moment(values.transferDate).toDate()}
                     display="default"
                     onChange={(event: any, date: Date | undefined) => {
                       setShouldShowDatePicker(false);
-                      setFieldValue('transferDate', moment(date)
-                        .format('YYYY-MM-DD'));
+                      setFieldValue('transferDate', moment(date).format('YYYY-MM-DD'));
                     }}
                   />
                 )
@@ -173,7 +174,7 @@ const TransferForm: FC<TransferFormProps> = ({ type }) => {
             colorScheme="primary"
             width="48%"
           >
-            {type === 'normal' ? 'Wykonaj' : 'Zapisz'}
+            {transferRouteName === PaymentsRoutes.NewTransfer ? 'Wykonaj' : 'Zapisz'}
           </SubmitButton>
           <Button
             rounded="full"

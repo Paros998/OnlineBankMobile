@@ -4,6 +4,7 @@ import Payments from './Payments';
 import Transfers from './Transfers';
 import History from './History';
 import CyclicalTransfers from './CyclicalTransfers';
+import { PaymentsRoutes } from '../../../enums/PaymentsRoutes';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,28 +22,37 @@ const drawerNavigationOptions: DrawerNavigationOptions = {
 };
 
 const PaymentsHome = () => (
-  <Drawer.Navigator screenOptions={drawerNavigationOptions} initialRouteName="Payments">
+  <Drawer.Navigator
+    screenOptions={drawerNavigationOptions}
+    initialRouteName={PaymentsRoutes.Payments}
+  >
     <Drawer.Screen
-      name="Payments"
-      options={{ title: 'Płatności' }}
+      name={PaymentsRoutes.Payments}
+      options={{ title: 'Płatności', unmountOnBlur: true }}
       component={Payments}
     />
 
     <Drawer.Screen
-      name="Transfers"
-      options={{ title: 'Przelewy' }}
+      name={PaymentsRoutes.NewTransfer}
+      options={{ title: 'Wykonaj przelew jednorazowy', unmountOnBlur: true }}
       component={Transfers}
     />
 
     <Drawer.Screen
-      name="CyclicalTransfers"
-      options={{ title: 'Zdefiniowane przelewy' }}
+      name={PaymentsRoutes.NewCyclicalTransfer}
+      options={{ title: 'Swtórz nowy przelew cykliczny', unmountOnBlur: true }}
+      component={Transfers}
+    />
+
+    <Drawer.Screen
+      name={PaymentsRoutes.CyclicalTransfers}
+      options={{ title: 'Twoje przelewy cykliczne', unmountOnBlur: true }}
       component={CyclicalTransfers}
     />
 
     <Drawer.Screen
-      name="History"
-      options={{ title: 'Historia' }}
+      name={PaymentsRoutes.History}
+      options={{ title: 'Historia', unmountOnBlur: true }}
       component={History}
     />
   </Drawer.Navigator>

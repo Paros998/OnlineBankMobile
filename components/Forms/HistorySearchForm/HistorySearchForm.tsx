@@ -3,7 +3,6 @@ import { useFormikContext } from 'formik';
 import { Box } from 'native-base';
 import { HistorySearchFormikValues } from '../../../interfaces/HistorySearchFormikValues';
 import SelectInput from '../../Inputs/SelectInput/SelectInput';
-import { paymentCategoryOptions } from '../../../constants/paymentCategoryOptions';
 import { TransfersCategoriesModel } from '../../../interfaces/TransfersCategoriesModel';
 import { useDropdown } from '../../../hooks/useDropdown';
 

@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-import { useIsFocused } from '@react-navigation/native';
 
 export const useFetchRawData = <T extends unknown>(endpoint: string, params?: any) => {
   const [rawData, setRawData] = useState<T>();
   const [isPending, setIsPending] = useState(false);
-  const isFocused = useIsFocused();
 
   const fetchData = useCallback(async () => {
     setIsPending(true);
@@ -20,10 +18,8 @@ export const useFetchRawData = <T extends unknown>(endpoint: string, params?: an
   }, [setIsPending, setRawData, endpoint, params]);
 
   useEffect(() => {
-    if (isFocused) {
-      fetchData().catch();
-    }
-  }, [isFocused, fetchData]);
+    fetchData().catch();
+  }, [fetchData]);
 
   return { rawData, fetchData, isPending };
 };

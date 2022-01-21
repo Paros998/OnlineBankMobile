@@ -1,12 +1,16 @@
 import React, { FC, useState } from 'react';
-import { Button, Center, Heading, useToast, View } from 'native-base';
+import { Button, Center, Heading, Image, Text, useToast, View } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Platform } from 'react-native';
+import { PaymentsRoutes } from '../../../enums/PaymentsRoutes';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { FormRouteParams } from '../../../interfaces/FormRouteParams';
+import scanImage from '../../../assets/scan-qr.png';
 
 const TransfersQrPreview: FC = () => {
-  const navigation = useNavigation();
-  const [ hasPermission, setHasPermission ] = useState<string | null>(null);
+  const navigation = useNavigation<NativeStackNavigationProp<FormRouteParams>>();
+  const [hasPermission, setHasPermission] = useState<string | null>(null);
   const toast = useToast();
 
   const handleShowQRScanner = async () => {
@@ -22,15 +26,24 @@ const TransfersQrPreview: FC = () => {
         return;
       }
     }
-    navigation.navigate('QRCodeScanner' as never);
+    navigation.navigate(PaymentsRoutes.QRCodeScanner as never);
   };
 
   return (
     <View bgColor='dark.800'>
-      <Center h='full'>
-        <Heading color='pink.500'>Posiadasz kod QR kwoty? Zeskanuj ją za pomocą naszego skanera.</Heading>
+      <Center h='full' p={5}>
+        <Image source={scanImage} alt='Scan icon' w='1/2' h='1/2' />
+
+        <Heading textAlign='center' mt='5' color='white'>
+          Posiadasz kod QR kwoty?
+        </Heading>
+
+        <Text textAlign='center' fontSize={18}>
+          Zeskanuj ją za pomocą naszego skanera.
+        </Text>
 
         <Button
+          w='1/2'
           mt={5}
           colorScheme='primary'
           onPress={handleShowQRScanner}
@@ -40,9 +53,10 @@ const TransfersQrPreview: FC = () => {
         </Button>
 
         <Button
+          w='1/2'
           mt={5}
           colorScheme='secondary'
-          onPress={() => navigation.navigate('Form' as never)}
+          onPress={() => navigation.navigate(PaymentsRoutes.Form, { initialAmount: 0 })}
         >
           Pomiń skanowanie
         </Button>

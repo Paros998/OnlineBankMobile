@@ -1,26 +1,27 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import QrCodeScanner from './QRCodeScanner';
 import TransfersQrPreview from './TransfersQRPreview';
 import TransfersFormik from './TransfersFormik';
+import { useRoute } from '@react-navigation/native';
+import { PaymentsRoutes } from '../../../enums/PaymentsRoutes';
 
 const Stack = createNativeStackNavigator();
 
 const Transfers: FC = () => {
-  const [initialAmount, setInitialAmount] = useState(0);
+  const route = useRoute();
+
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName='QRPreview'
+      initialRouteName={PaymentsRoutes.QRPreview}
     >
-      <Stack.Screen name='QRPreview' component={TransfersQrPreview} />
+      <Stack.Screen name={PaymentsRoutes.QRPreview} component={TransfersQrPreview} />
 
-      <Stack.Screen name='QRCodeScanner'>
-        {() => <QrCodeScanner setInitialAmount={setInitialAmount} />}
-      </Stack.Screen>
+      <Stack.Screen name={PaymentsRoutes.QRCodeScanner} component={QrCodeScanner} />
 
-      <Stack.Screen name='Form'>
-        {() => <TransfersFormik initialAmount={initialAmount} />}
+      <Stack.Screen name={PaymentsRoutes.Form}>
+        {() => <TransfersFormik transferRouteName={route.name} />}
       </Stack.Screen>
     </Stack.Navigator>
   );

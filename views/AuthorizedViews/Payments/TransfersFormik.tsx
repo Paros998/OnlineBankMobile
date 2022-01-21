@@ -1,18 +1,15 @@
 import React, { FC } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useCurrentUser } from '../../../contexts/CurrentUserProvider';
 import { useToast, View } from 'native-base';
-import { TransferData } from '../../../interfaces/TransferData';
-import { TransferModel } from '../../../interfaces/TransferModel';
-import { CyclicalTransferModel } from '../../../interfaces/CyclicalTransferModel';
-import moment from 'moment';
-import { TransferType } from '../../../enums/TransferType';
-import { ClientModel } from '../../../interfaces/ClientModel';
-import axios from 'axios';
-import Logo from '../../../components/Logo/Logo';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { Formik } from 'formik';
-import TransferForm from '../../../components/Forms/TransferForm/TransferForm';
+import axios from 'axios';
 import * as Yup from 'yup';
+import { TransferData } from '../../../interfaces/TransferData';
+import Logo from '../../../components/Logo/Logo';
+import TransferForm from '../../../components/Forms/TransferForm/TransferForm';
+import { PaymentsRoutes } from '../../../enums/PaymentsRoutes';
+import { FormRouteParams } from '../../../interfaces/FormRouteParams';
+import { useTransferPostItems } from '../../../hooks/useTransferPostItems';
 
 const validationSchema = Yup.object().shape({
   amount: Yup.number().required('Kwota jest wymagana').positive('Kwota nie może być ujemna'),
@@ -25,61 +22,27 @@ const validationSchema = Yup.object().shape({
 });
 
 interface TransfersFormikProps {
-  initialAmount: number;
+  transferRouteName: string;
 }
 
-const TransfersFormik: FC<TransfersFormikProps> = ({ initialAmount }) => {
-  const route = useRoute();
-  const { currentUser, fetchUser } = useCurrentUser();
-  const navigation = useNavigation();
+const TransfersFormik: FC<TransfersFormikProps> = ({ transferRouteName }) => {
+  const route = useRoute<RouteProp<FormRouteParams, PaymentsRoutes.Form>>();
   const toast = useToast();
-  let params: { type: string };
-
-  if (route.params)
-    params = route.params as { type: string };
-  else params = { type: 'normal' };
+  const getPostItems = useTransferPostItems(transferRouteName);
 
   const initialFormikValues: TransferData = {
-    amount: initialAmount,
-    category: "",
-    receiver_sender: "",
-    title: "",
-    toAccountNumber: ""
+    amount: route.params.initialAmount,
+    category: '',
+    receiver_sender: '',
+    title: '',
+    toAccountNumber: ''
   };
 
   const handleSubmit = async (values: TransferData) => {
-    const isNormalTransfer = params.type === 'normal';
-    let postValues: TransferModel | CyclicalTransferModel;
-    let endpoint: string;
-    let successMessage: string;
-    let operationAfterSuccess: () => void | Promise<void>;
-
-    if (isNormalTransfer) {
-      postValues = {
-        ...values,
-        transferDate: moment().toISOString(),
-        type: TransferType.Outgoing,
-        client: currentUser || {} as ClientModel
-      };
-      endpoint = '/transfers';
-      successMessage = '👍 Zrealizowano przelew';
-      operationAfterSuccess = fetchUser;
-    } else {
-      postValues = {
-        ...values,
-        reTransferDate: moment(values.transferDate).toISOString(),
-        receiver: values.receiver_sender,
-        accountNumber: values.toAccountNumber,
-        client: currentUser || {} as ClientModel
-      };
-      endpoint = '/cyclical-transfers';
-      successMessage = '👍 Zrealizowano przelew cykliczny';
-      operationAfterSuccess = () => navigation.navigate('CyclicalTransfers' as never);
-    }
-
+    const { operationAfterSuccess, successMessage, postValues, endpoint } = getPostItems(values);
     try {
       await axios.post(endpoint, postValues);
-      await operationAfterSuccess();
+      operationAfterSuccess();
       toast.show({ title: successMessage, status: 'success' });
     } catch {
       toast.show({ title: 'Coś poszło nie tak', status: 'error' });
@@ -101,7 +64,10 @@ const TransfersFormik: FC<TransfersFormikProps> = ({ initialAmount }) => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <TransferForm type={params.type} />
+        <TransferForm
+          transferRouteName={transferRouteName}
+          initialValue={route.params.initialAmount}
+        />
       </Formik>
     </View>
   );
